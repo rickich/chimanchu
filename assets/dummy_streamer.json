@@ -1,0 +1,46 @@
+{
+    "followingStreamer":[
+        {
+            "id": "00000001",
+            "name": "Shroud",
+            "pictureURI": "https://static-cdn.jtvnw.net/jtv_user_pictures/7ed5e0c6-0191-4eef-8328-4af6e4ea5318-profile_image-70x70.png",
+            "onAir":true
+        },
+        {
+            "id": "00000002",
+            "name": "OverwatchLeague",
+            "pictureURI": "https://static-cdn.jtvnw.net/jtv_user_pictures/8c55fdc6-9b84-4daf-a33b-cb318acbf994-profile_image-70x70.png",
+            "onAir":false
+        },
+        {
+            "id": "00000003",
+            "name": "에스카",
+            "pictureURI": "https://static-cdn.jtvnw.net/jtv_user_pictures/qkfhzhal-profile_image-3ceeb6aad76110c6-70x70.jpeg",
+            "onAir":true
+        },
+        {
+            "id": "00000004",
+            "name": "Woowakgood",
+            "pictureURI": "https://static-cdn.jtvnw.net/jtv_user_pictures/ebc60c08-721b-4572-8f51-8be7136a0c96-profile_image-70x70.png",
+            "onAir":false
+        },
+        {
+            "id": "00000005",
+            "name": "MiracleTV",
+            "pictureURI": "https://static-cdn.jtvnw.net/jtv_user_pictures/222363dd-fa52-4d23-9469-8ef4281d3406-profile_image-70x70.png",
+            "onAir":true
+        },
+        {
+            "id": "00000006",
+            "name": "JJonak",
+            "pictureURI": "https://static-cdn.jtvnw.net/jtv_user_pictures/a90f72a3-338e-4f98-a7be-e1ac8c57a28a-profile_image-70x70.png",
+            "onAir":true
+        },
+        {
+            "id": "00000007",
+            "name": "Gabriel",
+            "pictureURI": "https://static-cdn.jtvnw.net/jtv_user_pictures/gabrielcro-profile_image-1425868f56c73737-70x70.jpeg",
+            "onAir":false
+        }
+    ]
+}
