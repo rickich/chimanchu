@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native'
 
-export default class OfflineStreamerCard extends React.Component{
+export default class StreamerCard extends React.Component{
 render(){
   streamer= this.props.streamer;
 
@@ -10,11 +10,6 @@ render(){
         <TouchableOpacity 
         onPress={()=>{this.props.navigation.navigate('MissionList',{'streamer':this.props.streamer, 'headerString': "Missions"})}}
         style={styles.button}>
-
-          <Image
-            style={styles.graythumbnail}
-            source={{uri:streamer["profile_image_url"]}} />
-
           <Image
             style={styles.thumbnail}
             source={{uri: streamer["profile_image_url"]}} />
@@ -27,20 +22,10 @@ render(){
 }
 
 const styles = StyleSheet.create({
-  graythumbnail:{
-    width:25,
-    height:25,
-    alignSelf:'baseline',
-    tintColor: 'silver',
-  },  
   thumbnail:{
-        position:'absolute',
         width:25,
         height:25,
         alignSelf:'baseline',
-        opacity: 0.3,
-        left:5,
-        top:5,
       },
       name:{
         paddingLeft: 5,

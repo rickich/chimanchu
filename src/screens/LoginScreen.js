@@ -6,9 +6,16 @@ import axios from 'axios';
 
 const TWITCH_APP_ID = 'vfno0i2im9fshlfil4hsyiq6esfnex'; 
 const REDIRECT_URL = AuthSession.getRedirectUrl();
+let data = {
+  "access_token": null,
+  "user_id": null,
+  "profile_url": null,
+  "display_name": null,
+  "following_streamer_data": null,
+}
 
 export default class LoginScreen extends Component {
-  state = {userTwitchData: [],auth_result: [],followingStreamer: []};
+  state = {userTwitchData: [],auth_result: [],followingStreamer: [],streamer: []};
 
   render() {
     return (
@@ -29,36 +36,95 @@ export default class LoginScreen extends Component {
       authUrl:
       "https://id.twitch.tv/oauth2/authorize?client_id="+TWITCH_APP_ID+"&redirect_uri="+REDIRECT_URL+"&response_type=token&scope=viewing_activity_read+user_subscriptions+user:read:email",
     });
-    console.log('result = '+JSON.stringify(result));
+    //console.log('result = '+JSON.stringify(result));
     this.setState({ auth_result: result });
     if(this.state.auth_result['type']=='success'){
-      console.log('SUCCESS!');
-
-      this.props.navigation.setParams({token: this.state.auth_result.params['access_token']});
-      await this._handleUserdata();
-      await this._handleUserFollower();
+      console.log('AUTH_SUCCESS!' + JSON.stringify(this.state.auth_result));
+      data["access_token"]=this.state.auth_result.params['access_token'];
+      this._handleUserdata(data["access_token"]);
     };
   };
-  _handleUserdata = async () =>{
-    await axios.get('https://api.twitch.tv/helix/users',{
-            headers:{'Authorization': 'Bearer '+this.props.navigation.getParam('token')}
-            })
-        .then(response => {this.setState({ userTwitchData: response.data.data[0]});
-        });
+
+  _handleUserdata = async (access_token) =>{    
+    let result = await axios.get('https://api.twitch.tv/helix/users',{
+            headers:{'Authorization': 'Bearer '+access_token}
+            });
+        this.setState({ userTwitchData: result.data.data[0]});
+        this._handleUserFollower(access_token);
   }
-  _handleUserFollower = async () =>{
-    const user_id = this.state.userTwitchData['id'];
-    console.log(user_id)
-    await axios.get('https://api.twitch.tv/helix/users/follows?first=100&from_id='+user_id,{
-      headers:{'Authorization': 'Bearer '+this.props.navigation.getParam('token')}
-      })
-  .then(response => {this.setState({ followingStreamer: response.data.data});
-   });
-   console.log("1"+this.state.userTwitchData)
-   console.log("2"+this.state.followingStreamer)
-    this.props.navigation.navigate("StreamerList",{'user_data':this.state.userTwitchData,'followingStreamer':this.state.followingStreamer,'token':this.props.navigation.getParam('token')});
+
+  _handleUserFollower = async (access_token) =>{
+    let result = await axios.get('https://api.twitch.tv/helix/users/follows?first=100&from_id='+this.state.userTwitchData["id"],{
+      headers:{'Authorization': 'Bearer '+access_token}
+      });
+    this.setState({ followingStreamer: result.data.data});
+    this._handleFollowingStreamerData(access_token);
+   //
+  }
+
+  _handleFollowingStreamerData =  async (access_token) => {
+    let query1 = 'https://api.twitch.tv/helix/users?' //to get userID for each following streamer
+    let query2 = 'https://api.twitch.tv/helix/streams?first=100&' //to get data for each of their most recent broadcast to see if they are currently live
+    
+    for (_streamer of this.state.followingStreamer){
+      id = _streamer.to_id
+      query1 = query1+"id="+id+"&"
+      query2 = query2+"user_id="+id+"&"
+    }
+
+    let result = await axios.get(query1,{
+      headers:{'Authorization': 'Bearer '+access_token}
+      });
+    this.setState({ streamer: result.data.data }); 
+
+    let broadcastInfo = await axios.get(query2,{
+        headers:{'Authorization': 'Bearer '+access_token}
+        });
+    await this.setState({ streamerBroadcastData: broadcastInfo.data.data}); 
+    await this.isStreamLive();
+    await this.cleanUpData();
+    //console.log(JSON.stringify(this.state.streamer))
+    this.props.navigation.navigate("StreamerList",{'user_data':this.state.userData,'stream_data':this.state.streamer});
+  }
+  
+  cleanUpData= async () => {
+    data = {
+      "access_token": this.state.auth_result.params['access_token'],
+      "user_id": this.state.userTwitchData["id"],
+      "profile_url": this.state.userTwitchData["profile_image_url"],
+      "display_name": this.state.userTwitchData["display_name"],
+    }     
+      this.getLiveStreams();
+      this.getOfflineStreams();
+      this.setState({userData: data});
+  }
+  getLiveStreams = ()=>{
+    liveStreams =  this.state.streamer.filter(function(item){
+      return item.isLive == true;
+    });
+  }
+  getOfflineStreams = ()=>{
+    offlineStreams =  this.state.streamer.filter(function(item){
+      return item.isLive == false;
+    });
+  }
+  isStreamLive = () =>{
+    for(_streamer of this.state.streamer){
+      _streamer.isLive = false;
+    }
+
+    for(_livestream of this.state.streamerBroadcastData){
+      for(_streamer of this.state.streamer){
+        if(_livestream['user_id']===_streamer['id']){
+          _streamer.isLive = true;
+          console.log(_livestream['user_name']);
+          break;
+        }
+      }
+     }    
   }
 }
+
 
 const styles = StyleSheet.create({
     container:{
