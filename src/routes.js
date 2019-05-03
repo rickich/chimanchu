@@ -33,11 +33,12 @@ const AuthStackNavigator = createStackNavigator({
         screen:LoginScreen
     }
 });
+
 const AppContainer = createAppContainer(createSwitchNavigator({
     Auth:AuthStackNavigator,
     App:AppStackNavigator,
 },{
-    initialRouteNamne: 'Auth',
+    initialRouteName: 'Auth',
 }));
 
 export default AppContainer;

@@ -14,6 +14,7 @@ export default class MissionScreen extends Component {
 
     render() {
       const streamer = this.props.navigation.getParam('streamer');
+      console.log(JSON.stringify(streamer))
     return (
       <View>
         <Header title="Missions"/>

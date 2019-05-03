@@ -7,6 +7,7 @@ import Loading from '../components/Loading'
 
 const TWITCH_APP_ID = 'vfno0i2im9fshlfil4hsyiq6esfnex'; 
 const REDIRECT_URL = AuthSession.getRedirectUrl();
+
 let data = {
   "access_token": null,
   "user_id": null,
@@ -25,6 +26,7 @@ export default class LoginScreen extends Component {
     if (this.state.isLoading){
       return <Loading />
     }
+  
     return (
       <View style={styles.container}>
         <Text style={styles.title_text}> ChiManChu </Text>
