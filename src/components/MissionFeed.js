@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView,Text } from 'react-native'
-import axios from 'axios';
+import { StyleSheet, ScrollView,Text,View } from 'react-native'
 import MissionCard from '../components/MissionCard'
 
 
@@ -10,10 +9,6 @@ export default class MissionFeed extends Component {
     componentDidMount(){
        const streamer = this.props.navigation.getParam('streamer');
        const streamerID = streamer.id
-
-    axios.get('http://localhost:3000/missions')
-    .then(response => {this.setState({ missionList: response.data[streamerID] });
-     });
     }
 
     redirectNoMission(streamer){
@@ -46,6 +41,7 @@ export default class MissionFeed extends Component {
             <ScrollView>
                 
                 <Text> Current Mission </Text>
+                <View style={styles.divide}></View>
                 {this.getOngoingMissionList()}
                 <Text> Pending Mission </Text>
                 {this.getPendingMissionList()}
@@ -53,3 +49,9 @@ export default class MissionFeed extends Component {
         )
     }
 }
+const styles= StyleSheet.create({
+    divide :{
+        borderBottomWidth:2,
+        borderBottomColor:'#645393'
+    }
+})

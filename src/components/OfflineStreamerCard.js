@@ -52,15 +52,14 @@ const styles = StyleSheet.create({
       },
       button:{
         width:'100%',
-        marginTop:15,
         padding: 5,
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignSelf:'center',
         alignContent: 'center',
         backgroundColor:'#ffffff',
-        borderWidth:1.5,
-        borderColor: '#645393',
+        borderBottomWidth:1,
+        borderBottomColor: '#645393',
         color:'#645393',
       },
       icon:{

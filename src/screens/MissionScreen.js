@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Text, View } from 'react-native'
 import Header from '../components/Header'
 import MissionFeed from '../components/MissionFeed'
-//import console = require('console');
 
 export default class MissionScreen extends Component {
     static navigationOptions = ({navigation})=> {

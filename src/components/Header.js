@@ -11,6 +11,7 @@ const Header = (props) => {
 
 const styles = StyleSheet.create({
     heading:{
+        color:'#645393',
         paddingTop:14,
         paddingLeft:7,
         fontSize:24,

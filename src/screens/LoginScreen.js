@@ -3,6 +3,7 @@ import { TouchableOpacity, Text, View, StyleSheet } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
 import { AuthSession } from 'expo';
 import axios from 'axios';
+import Loading from '../components/Loading'
 
 const TWITCH_APP_ID = 'vfno0i2im9fshlfil4hsyiq6esfnex'; 
 const REDIRECT_URL = AuthSession.getRedirectUrl();
@@ -15,9 +16,15 @@ let data = {
 }
 
 export default class LoginScreen extends Component {
+  static navigationOptions = {
+    header: null
+}
   state = {userTwitchData: [],auth_result: [],followingStreamer: [],streamer: []};
 
   render() {
+    if (this.state.isLoading){
+      return <Loading />
+    }
     return (
       <View style={styles.container}>
         <Text style={styles.title_text}> ChiManChu </Text>
@@ -45,7 +52,8 @@ export default class LoginScreen extends Component {
     };
   };
 
-  _handleUserdata = async (access_token) =>{    
+  _handleUserdata = async (access_token) =>{  
+    this.setState({isLoading:true})  
     let result = await axios.get('https://api.twitch.tv/helix/users',{
             headers:{'Authorization': 'Bearer '+access_token}
             });
@@ -84,6 +92,7 @@ export default class LoginScreen extends Component {
     await this.isStreamLive();
     await this.cleanUpData();
     //console.log(JSON.stringify(this.state.streamer))
+
     this.props.navigation.navigate("StreamerList",{'user_data':this.state.userData,'stream_data':this.state.streamer});
   }
   
@@ -133,35 +142,34 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
     },
     title_text:{
-      fontSize: 28,
+      fontSize: 48,
       fontWeight: 'bold',
       textAlign:'center',
       color:'#645393',
     },
     text:{
+      paddingLeft:'15%',
       fontSize: 18,
       alignSelf:'center',
-      textAlign:'center',
+      textAlign:'left',
       color:'#645393',
-      fontWeight: "600",
-
     },
     button:{
       marginTop:15,
       padding: 5,
       flexDirection: 'row',
-      justifyContent: 'space-between',
       alignSelf:'center',
       alignContent: 'center',
-      width: 200,
+      width: '70%',
       backgroundColor:'#ffffff',
-      borderWidth:1.5,
+      borderWidth:3,
       borderColor: '#645393',
       color:'#645393',
     },
     logo:{
+      paddingLeft: '5%',
       alignSelf:'baseline',
       color:'#645393',
-
+      
     }
 })
