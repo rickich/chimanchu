@@ -1,13 +1,25 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import {StyleSheet,Text,View} from 'react-native';
 import AppContainer from './src/routes';
-import { AppLoading, Asset, Font, Icon } from 'expo'
-import {createStore, applyMiddleware} from 'redux'
+import {AppLoading,Asset,Font,Icon} from 'expo'
+import {createStore,compose,applyMiddleware} from 'redux'
 import rootReducer from './src/reducers/rootReducer'
-import {Provider} from 'react-redux'
 import thunk from 'redux-thunk'
+import {getFirestore,reduxFirestore} from 'redux-firestore'
+import {getFirebase,reactReduxFirebase} from 'react-redux-firebase'
+import fbConfig from './src/config/fbConfig'
+import {Provider} from 'react-redux'
 
-const  store = createStore(rootReducer,applyMiddleware(thunk));
+const store = createStore(rootReducer,
+  compose(
+    applyMiddleware(thunk.withExtraArgument({
+      getFirebase,
+      getFirestore
+    })),
+    reduxFirestore(fbConfig),
+    reactReduxFirebase(fbConfig),
+  )
+);
 
 export default class App extends React.Component {
   state = {
@@ -15,19 +27,16 @@ export default class App extends React.Component {
   };
 
   render() {
-      if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
-        return (
-          <AppLoading
-            startAsync={this._loadResourcesAsync}
-            onError={this._handleLoadingError}
-            onFinish={this._handleFinishLoading}
-          />
-        );
-      } else {
-        
-      return <Provider store = {store}><AppContainer /></Provider>;
-      }
+    if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
+      return ( <AppLoading 
+        startAsync = {this._loadResourcesAsync}
+        onError = {this._handleLoadingError}
+        onFinish = {this._handleFinishLoading}
+        />
+      );
+    } else {return <Provider store = {store}>< AppContainer /></Provider>;}
   }
+  
   _loadResourcesAsync = async () => {
     return Promise.all([
       Asset.loadAsync([
@@ -54,6 +63,8 @@ export default class App extends React.Component {
   };
 
   _handleFinishLoading = () => {
-    this.setState({ isLoadingComplete: true });
+    this.setState({
+      isLoadingComplete: true
+    })
   };
 }

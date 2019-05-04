@@ -8,9 +8,8 @@ export default class StreamerFeed extends Component {
     static navigationOptions = ({navigation}) => {
         return{
           headerBackTitle:null,
-        }
-
-      }
+       }
+    }
     getLiveStreamerList(){
         return this.props.navigation.getParam('stream_data').map(_streamer => {
             if(_streamer.isLive){

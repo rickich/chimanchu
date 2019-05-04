@@ -52,7 +52,7 @@ export default class MissionScreen extends Component {
         </View>
         <Header title="Missions" style={{width:'100%',alignContent:'center', }}/>
         <MissionFeed navigation={this.props.navigation}/>
-        <TouchableOpacity style={styles.button} onPress = {()=>{ this.props.navigation.navigate('CreateMission')}}>
+        <TouchableOpacity style={styles.button} onPress = {()=>{ this.props.navigation.navigate('CreateMission'),{'streamer':streamer}}}>
                 <Text style={styles.button_txt}>Send New Mission</Text>
         </TouchableOpacity>
       </View>

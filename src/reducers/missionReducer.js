@@ -28,7 +28,16 @@ const initState = {
     
 }
 const missionReducer = (state = initState, action) =>{
-    return state
+    switch(action.type){
+        case 'CREATE_MISSION':
+            console.log('mission Created')
+            return state;
+        case 'CREATE_MISSION_ERROR':
+            console.log ('creatMission error', action.err);
+            return state;
+        default:
+            return state;
+    }
 }
 
 export default missionReducer

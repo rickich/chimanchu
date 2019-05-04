@@ -40,7 +40,10 @@ const AppContainer = createAppContainer(createSwitchNavigator({
 },{
     initialRouteName: 'Auth',
     headerStyle: {
-        backgroundColor: '#645393',
+        backgroundColor: '#123444',
+        borderBottomWidth:3,
+        borderBottomColor:"#123444",
+        borderBottomRadius:10,
       },
 }));
 

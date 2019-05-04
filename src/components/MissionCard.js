@@ -7,15 +7,14 @@ export default class MissionCard extends React.Component{
         const mission = this.props.mission;
         return (
             <View>
-
             <TouchableOpacity 
             onPress={()=>
                 {
                 this.props.navigation.navigate('MissionDetail',{'mission':mission, 'headerString': "Detail"})}}
             style={styles.button}>
 
-            <Text style={styles.name}>{mission.info.title}</Text>
-            <Text style={styles.name}>{this.getTotalAmount(mission.info.amount)}</Text>   
+            <Text style={styles.name}>{mission.title}</Text>
+            <Text style={styles.name}>{mission.amount}</Text>   
             {/* {this.logMission(mission)}  */}
             {this.displayIcon()}
             </TouchableOpacity>
@@ -26,18 +25,11 @@ export default class MissionCard extends React.Component{
        console.log("MISSION"+(mission.status))
    }
 
-   getTotalAmount(amt){
-       let sum=0;
-        for (let i = 0 ; i<amt.length; i++){
-           sum=sum+amt[i];
-       }
-       return sum;
-   }
-
    displayIcon(){ 
         return <Ionicons name="md-add" size={15} style={styles.icon} />
    }
 }
+
 const styles = StyleSheet.create({
     thumbnail:{
         width:25,

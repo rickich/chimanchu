@@ -2,45 +2,54 @@ import React, { Component } from 'react'
 import { TouchableOpacity, StyleSheet, ScrollView,Text,View } from 'react-native'
 import MissionCard from '../components/MissionCard'
 import {connect} from 'react-redux'
-
+import {firestoreConnect} from 'react-redux-firebase'
+import {compose} from 'redux'
 
 class MissionFeed extends Component {
+    state = {
+        isLoading: true
+    }
     componentDidMount(){
        const streamer = this.props.navigation.getParam('streamer');
        const streamerID = streamer.id
+       this.setState({isLoading: false});
     }
 
     returnNoMission(streamer){
         <Text>NO MISSION</Text>
         }
     
-    getCurrentMission = () => {
-        const allMissionIds = Object.keys(this.props.missions);
-        for (let i = 0; i<allMissionIds.length;i++){
-            if(this.props.missions[allMissionIds[i]].to_id==streamer.id){
-               console.log('missions here')
-            }
-        }
-    }
-    
     displayCurrentMission = () =>{
-        console.log(this.props.missions.abc.to_id)
-        this.getCurrentMission();
+        return this.props.missions.map(_mission => {
+            if(_mission.to_id==streamer.id){
+            return(
+            <MissionCard key={_mission.id} mission = {_mission} navigation={this.props.navigation}/>
+            );
+            }
+        })
     }
 
     render() {
         //console.log(this.props.missions)
-
+        if(this.props.missions == undefined){
+            return(<View>
+                <Text>loading</Text>
+            </View>)
+        }
+        else{
         return (
             <ScrollView>
-                <TouchableOpacity onPress={this.displayCurrentMission}><Text>Current</Text></TouchableOpacity>
-                <TouchableOpacity onPress={this.displayCurrentMission}><Text>Pending</Text></TouchableOpacity>
-
+                {/* <TouchableOpacity onPress={this.displayCurrentMission}><Text>Current</Text></TouchableOpacity>
+                <TouchableOpacity onPress={this.displayCurrentMission}><Text>Pending</Text></TouchableOpacity> */}
+                
                 <View style={styles.divide}></View>
+                {this.displayCurrentMission()}
             </ScrollView>
         )
+        }
     }
 }
+
 const styles= StyleSheet.create({
     divide :{
         borderBottomWidth:2,
@@ -48,10 +57,18 @@ const styles= StyleSheet.create({
     }
 })
 
-const mapStateToProps = (state) => {
-    return{
-        missions: state.mission.missions 
+const mapStateToProps = (state) =>  {
+    console.log(JSON.stringify(state.firestore.ordered.missions));
+     return{
+        missions: state.firestore.ordered.missions 
     }
 }
 
-export default connect(mapStateToProps)(MissionFeed)
+export default compose(
+    connect(mapStateToProps),
+    firestoreConnect([
+        {
+            collection: 'missions'
+        }
+    ])
+)(MissionFeed)
