@@ -5,6 +5,12 @@ import StreamerCard from './StreamerCard'
 import Header from './Header'
 
 export default class StreamerFeed extends Component {
+    static navigationOptions = ({navigation}) => {
+        return{
+          headerBackTitle:null,
+        }
+
+      }
     getLiveStreamerList(){
         return this.props.navigation.getParam('stream_data').map(_streamer => {
             if(_streamer.isLive){
@@ -29,7 +35,7 @@ export default class StreamerFeed extends Component {
     render() {
         return (
             <ScrollView style={styles.background}>
-                <Header title="Live"/>
+                <Header title="Live" />
                 <View style={styles.divide}></View>
                 {this.getLiveStreamerList()}
                 <Header title="Offline"/>
@@ -44,7 +50,8 @@ const styles= StyleSheet.create({
         backgroundColor:'#ffffff'
     },
     divide :{
+        backgroundColor:'#fff',
         borderBottomWidth:1.5,
-        borderBottomColor:'#645393'
+        borderBottomColor:'#a9a0c0'
     }
 })

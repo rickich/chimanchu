@@ -39,6 +39,9 @@ const AppContainer = createAppContainer(createSwitchNavigator({
     App:AppStackNavigator,
 },{
     initialRouteName: 'Auth',
+    headerStyle: {
+        backgroundColor: '#645393',
+      },
 }));
 
 export default AppContainer;

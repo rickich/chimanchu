@@ -15,13 +15,20 @@ let data = {
   "display_name": null,
   "following_streamer_data": null,
 }
+function cacheImages(images) {
+  return images.map(image => {
+    if (typeof image === 'string') {
+      return Image.prefetch(image);
+    } 
+  });
+}
 
 export default class LoginScreen extends Component {
   static navigationOptions = {
     header: null
 }
   state = {userTwitchData: [],auth_result: [],followingStreamer: [],streamer: []};
-
+ 
   render() {
     if (this.state.isLoading){
       return <Loading />
@@ -94,8 +101,10 @@ export default class LoginScreen extends Component {
     await this.isStreamLive();
     await this.cleanUpData();
     //console.log(JSON.stringify(this.state.streamer))
-
-    this.props.navigation.navigate("StreamerList",{'user_data':this.state.userData,'stream_data':this.state.streamer});
+    setTimeout(() => {
+      this.setState({isLoading: false})
+      this.props.navigation.navigate("StreamerList",{'user_data':this.state.userData,'stream_data':this.state.streamer});
+    }, 1000)
   }
   
   cleanUpData= async () => {
@@ -107,6 +116,7 @@ export default class LoginScreen extends Component {
     }     
       this.getLiveStreams();
       this.getOfflineStreams();
+      this._loadAssetsAsync();
       this.setState({userData: data});
   }
   getLiveStreams = ()=>{
@@ -133,6 +143,35 @@ export default class LoginScreen extends Component {
         }
       }
      }    
+  }
+  async _loadAssetsAsync() {
+    let prof_url_list = [];
+    
+    for (_streamer of this.state.followingStreamer){
+      prof_url_list.push(_streamer.profile_image_url);
+    }
+
+    const imageAssets = cacheImages(prof_url_list);
+    await Promise.all([...imageAssets]);
+  }
+
+  render() {
+    if (this.state.isLoading){
+      return <Loading />
+    }
+  
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title_text}> ChiManChu </Text>
+        <TouchableOpacity 
+        onPress={this._handlePressAsync} 
+        style={styles.button}
+        >
+        <Ionicons name="logo-twitch" size={28} style={styles.logo} />
+        <Text style={styles.text}>Login with Twitch</Text>
+        </TouchableOpacity>
+      </View>
+    )
   }
 }
 

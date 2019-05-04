@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import { StyleSheet, ScrollView,Text,View } from 'react-native'
+import { TouchableOpacity, StyleSheet, ScrollView,Text,View } from 'react-native'
 import MissionCard from '../components/MissionCard'
 
 
 export default class MissionFeed extends Component {
-    state = {missionList: []};
+    state = {missionList: [],missionDisplayType: 'current'};
     
     componentDidMount(){
        const streamer = this.props.navigation.getParam('streamer');
@@ -17,7 +17,7 @@ export default class MissionFeed extends Component {
 
     getOngoingMissionList(){
         return this.state.missionList.map(_mission => {
-            if(_mission.status=="ongoing"){
+            if(this.state.missionDisplayType=="current"){
             return(
             <MissionCard key={_mission.id} mission = {_mission} navigation={this.props.navigation}/>
             );
@@ -35,15 +35,21 @@ export default class MissionFeed extends Component {
         })
         
     }
+    displayCurrentMission = () =>{
+        this.getOngoingMissionList();
+    }
+    displayPendingMission = () =>{
+        this.getOngoingMissionList();
+    }
 
     render() {
         return (
             <ScrollView>
-                
-                <Text> Current Mission </Text>
+                <TouchableOpacity onPress={this.displayCurrentMission()}><Text>Current</Text></TouchableOpacity>
+                <TouchableOpacity onPress={this.displayPendingMission()}><Text>Pending</Text></TouchableOpacity>
+
                 <View style={styles.divide}></View>
                 {this.getOngoingMissionList()}
-                <Text> Pending Mission </Text>
                 {this.getPendingMissionList()}
             </ScrollView>
         )

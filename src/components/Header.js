@@ -11,6 +11,7 @@ const Header = (props) => {
 
 const styles = StyleSheet.create({
     heading:{
+        fontFamily:'noto-bold',
         color:'#645393',
         paddingTop:14,
         paddingLeft:7,
