@@ -52,6 +52,9 @@ export default class MissionScreen extends Component {
         </View>
         <Header title="Missions" style={{width:'100%',alignContent:'center', }}/>
         <MissionFeed navigation={this.props.navigation}/>
+        <TouchableOpacity style={styles.button} onPress = {()=>{ this.props.navigation.navigate('CreateMission')}}>
+                <Text style={styles.button_txt}>Send New Mission</Text>
+        </TouchableOpacity>
       </View>
     )
   }
@@ -120,6 +123,14 @@ const styles = StyleSheet.create({
     textAlign:'left',
     color:'#645393',
     fontWeight:'bold'
-  },
+  }, 
+  button:{
+    width:'100%',
+    backgroundColor:'#645393',
+    borderRadius:10,
+},
+button_txt:{
+    color:'#fff',
+},
      
 })

@@ -2,6 +2,12 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import AppContainer from './src/routes';
 import { AppLoading, Asset, Font, Icon } from 'expo'
+import {createStore, applyMiddleware} from 'redux'
+import rootReducer from './src/reducers/rootReducer'
+import {Provider} from 'react-redux'
+import thunk from 'redux-thunk'
+
+const  store = createStore(rootReducer,applyMiddleware(thunk));
 
 export default class App extends React.Component {
   state = {
@@ -18,7 +24,8 @@ export default class App extends React.Component {
           />
         );
       } else {
-      return <AppContainer />;
+        
+      return <Provider store = {store}><AppContainer /></Provider>;
       }
   }
   _loadResourcesAsync = async () => {

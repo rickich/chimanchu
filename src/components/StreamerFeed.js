@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView,StyleSheet,View } from 'react-native'
+import { ScrollView,StyleSheet,View, TouchableOpacity,Text } from 'react-native'
 import OfflineStreamerCard from './OfflineStreamerCard'
 import StreamerCard from './StreamerCard'
 import Header from './Header'
@@ -42,7 +42,8 @@ export default class StreamerFeed extends Component {
                 <View style={styles.divide}></View>
                 {this.getOfflineStreamerList()}
             </ScrollView>
-        )
+            
+        );  
     }
 }
 const styles= StyleSheet.create({

@@ -36,7 +36,7 @@ render(){
     
   }
     else{
-    return <Text style={styles.name}>{streamer['display_name']}</Text>;
+     return <Text style={styles.name}>{streamer['display_name']}</Text>;
     }
   }
 }
