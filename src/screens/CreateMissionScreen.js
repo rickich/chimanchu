@@ -1,10 +1,33 @@
 import React, { Component } from 'react'
-import { Text, View } from 'react-native'
+import { Text,TouchableOpacity, StyleSheet, View } from 'react-native'
 import { Input, Button } from 'react-native-elements'
 import { createMission } from '../actions/missionActions'
 import {connect} from 'react-redux'
 
 class CreateMissionScreen extends Component {
+  static navigationOptions = ({navigation})=> {
+      
+    return{
+    title: 'Missions',
+    headerBackTitle:null,
+    headerTintColor: '#fff',
+    headerStyle:{
+      backgroundColor:'#645393',
+     },
+    headerRight: <TouchableOpacity style={{
+    width:'100%',
+    }}
+    onPress={()=>navigation.navigate('Login')} 
+    ><Text style={{
+      fontFamily:'noto',
+      fontSize:14,
+      color:'#fff',
+    }}>Hi,{userdata.display_name} </Text></TouchableOpacity>,
+    headerRightContainerStyle:{
+        paddingRight:10,
+    },
+    }
+};
   streamer = this.props.navigation.getParam('streamer');
 
   state ={
@@ -14,14 +37,15 @@ class CreateMissionScreen extends Component {
     from_id: this.props.user.id,
     to_id: streamer.id,
     status: 'pending',
+    from_name: this.props.user.displayName
   }
   render() {
     return (
       <View>
-        <Input label='Title' keyboardType = 'default' onChangeText={(text) => this.setState({title: text})}/>
-        <Input label='Detail' keyboardType = 'default' onChangeText={(text) => this.setState({detail: text})}/>
-        <Input label='Amount' keyboardType = 'numeric' onChangeText={(text) => this.setState({amount: text})}/>
-        <Button title='Submit Mission'  onPress={this.handlePost}></Button>
+        <Input labelStyle={styles.label} containerStyle={styles.inputContainer} inputContainerStyle={styles.title} label='Title' keyboardType = 'default' onChangeText={(text) => this.setState({title: text})}/>
+        <Input labelStyle={styles.label} containerStyle={styles.inputContainer} inputContainerStyle={styles.title}label='Detail' keyboardType = 'default' onChangeText={(text) => this.setState({detail: text})}/>
+        <Input labelStyle={styles.label} containerStyle={styles.inputContainer} inputContainerStyle={styles.title} label='Amount' keyboardType = 'numeric' onChangeText={(text) => this.setState({amount: text})}/>
+        <TouchableOpacity style = {styles.button} onPress={this.handlePost}><Text style={styles.button_txt}>Submit Mission</Text></TouchableOpacity>
       </View>
     )
   }
@@ -33,6 +57,70 @@ class CreateMissionScreen extends Component {
     this.props.navigation.navigate('MissionList')
   }
 }
+const styles = StyleSheet.create({
+  divide :{
+    borderBottomWidth:1.5,
+    borderBottomColor:'#645393'
+},
+  label:{
+    marginTop:40,
+    marginLeft:'7%',
+    marginBottom:2,
+    fontFamily: 'noto',
+    color:'#645393',
+  },
+  title:{
+    marginHorizontal:'5%',
+    width:'90%',
+    borderColor:'#645393',
+    borderBottomWidth:1.5,
+    justifyContent:'center',
+    borderRadius:5,
+    height:50,
+  },
+  title_text:{
+    fontFamily: 'nunito-semibold',
+      paddingLeft: 10,
+      fontSize: 20,
+      alignSelf:'flex-start',
+      textAlign:'left',
+      color:'#645393', 
+  },
+  detail_container:{
+    marginHorizontal:'5%',
+    width:'90%',
+    borderColor:'#645393',
+    borderWidth:1.5,
+    justifyContent:'flex-start',
+    borderRadius:5,
+    height:120,
+  },
+    detail:{
+      fontFamily: 'nunito-semibold',
+      paddingTop: 7,
+      paddingLeft: 10,
+      fontSize: 18,
+      alignSelf:'flex-start',
+      textAlign:'left',
+      color:'#645393', 
+    },
+    button:{
+      alignItems:'center',
+      justifyContent:'center',
+      margin:'5%',
+      backgroundColor:'#645393',
+      borderRadius:10,
+      height:50,
+  },
+  button_txt:{
+    fontFamily: 'nunito-semibold',
+    color:'#fff',
+    textAlign:'center',
+    alignSelf:'center'
+  },
+})
+
+
 const mapStateToProps = (state) =>{
   return{
     user: state.auth

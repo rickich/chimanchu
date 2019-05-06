@@ -40,7 +40,7 @@ export default class MissionScreen extends Component {
       streamer=this.props.navigation.getParam('streamer');
       console.log(JSON.stringify(this.props.navigation))
     return (
-      <View>
+      <View style={styles.container}>
         <View style={styles.profile}>
         <Image
             style={styles.thumbnail}
@@ -50,11 +50,13 @@ export default class MissionScreen extends Component {
             {this.liveIndicator()}
             </View>
         </View>
+        <View style= {styles.missionFeed}>
         <Header title="Missions" style={{width:'100%',alignContent:'center', }}/>
         <MissionFeed navigation={this.props.navigation}/>
-        <TouchableOpacity style={styles.button} onPress = {()=>{ this.props.navigation.navigate('CreateMission',{'streamer':this.props.navigation.getParam('streamer')})}}>
-                <Text style={styles.button_txt}>Send New Mission</Text>
-        </TouchableOpacity>
+        </View>
+          <TouchableOpacity style={styles.button} onPress = {()=>{ this.props.navigation.navigate('CreateMission',{'streamer':this.props.navigation.getParam('streamer')})}}>
+                  <Text style={styles.button_txt}>Send New Mission</Text>
+          </TouchableOpacity>
       </View>
     )
   }
@@ -79,39 +81,43 @@ export default class MissionScreen extends Component {
   }
 }
 const styles = StyleSheet.create({
-  scene: {
-    flex: 1,
+  container:{
+    flex:1,
+    flexDirection:'column',
+    alignContent:'flex-start'
   },
   liveIcon:{
     marginLeft:15,
+    color: 'red',
+    alignItems:'center',
     flexDirection:'row',
-    color: 'red',
-    alignContent: 'center',
-  },
-  liveText:{
-    color: 'red',
-    alignContent: 'center',
   },
   icon:{
-    alignSelf:'center',
     marginLeft: 10,
+    alignSelf:'center'
   },
   profile:{
-    marginTop:15,
-    marginLeft:20,
+    flex:1.7,
+    alignItems:'center',
     flexDirection:'row',
+    alignSelf:'flex-start',
+    alignItems:'center',
+    marginLeft:30,
+    marginTop:20,
   },
   thumbnail:{
     width:70,
     height:70,
-    alignSelf:'baseline',
     borderRadius:15,
+  },
+  missionFeed:{
+    flex:9,
   },
   name:{
     fontFamily: 'nunito-semibold',
     paddingLeft: 10,
     fontSize: 22,
-    alignSelf:'center',
+    alignSelf:'flex-start',
     textAlign:'left',
     color:'#645393',
   },
@@ -119,18 +125,26 @@ const styles = StyleSheet.create({
     fontFamily: 'hanna',
     paddingLeft: 10,
     fontSize: 22,
-    alignSelf:'center',
+    alignSelf:'flex-start',
     textAlign:'left',
     color:'#645393',
     fontWeight:'bold'
   }, 
+
   button:{
-    width:'100%',
+    flex:1,
+    justifyContent:'center',
+    margin:20,
     backgroundColor:'#645393',
     borderRadius:10,
+    height:50,
 },
 button_txt:{
+  fontFamily: 'nunito-semibold',
     color:'#fff',
+    textAlign:'center',
+    alignSelf:'center',
+
 },
      
 })

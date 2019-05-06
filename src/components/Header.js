@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
         fontFamily:'noto-bold',
         color:'#645393',
         paddingTop:14,
-        paddingLeft:7,
+        paddingLeft:'2%',
         fontSize:24,
         fontWeight:'bold',
       }

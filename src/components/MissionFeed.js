@@ -6,24 +6,31 @@ import {firestoreConnect} from 'react-redux-firebase'
 import {compose} from 'redux'
 
 class MissionFeed extends Component {
-    state = {
-        isLoading: true
-    }
-    componentDidMount(){
-       this.setState({isLoading: false});
-    }
     
     displayAllMissions = () =>{
-       const streamer = this.props.navigation.getParam('streamer');
-       const streamerID = streamer.id
-       console.log(this.props.missions)
-        return this.props.missions.map(_mission => {
-            if(_mission.to_id==streamerID){
-            return(
-            <MissionCard key={_mission.id} mission = {_mission} navigation={this.props.navigation}/>
-            );
+        const streamer = this.props.navigation.getParam('streamer');
+        const streamerID = streamer.id
+        let isEmpty = true
+        console.log(this.props.missions)
+        this.props.missions.map(_mission => {
+            if(_mission.to_id == streamerID){
+                console.log('not empty')
+                isEmpty = false;
+                return;
             }
-        })
+        });
+        if(isEmpty){
+            return <Text style={styles.noMission}>Streamer has mission given. You can submit a mission by clicking button below!</Text>
+        }
+        else{
+            return this.props.missions.map(_mission => {
+                if(_mission.to_id==streamerID){
+                    return(
+                    <MissionCard key={_mission.id} mission = {_mission} navigation={this.props.navigation}/>
+                    );
+                }
+            })
+        }
     }
 
     render() {
@@ -33,21 +40,34 @@ class MissionFeed extends Component {
                 <Text>loading</Text>
             </View>)
         }
-        else{
-        return (
-            <ScrollView>
-                <View style={styles.divide}></View>
-                {this.displayAllMissions()}
-            </ScrollView>
-        )
+        else if(this.props.missions!= undefined){
+            return (
+                <ScrollView>
+                    <View style={styles.divide}></View>
+                    {this.displayAllMissions()}
+                </ScrollView>
+            )
         }
+        // if (this.state.missionEmpty){
+        //     console.log('nomission')
+        //     return <Text style={styles.noMission}>Streamer has mission given. You can submit a mission by clicking button below!</Text>
+        // }
     }
 }
 
 const styles= StyleSheet.create({
     divide :{
-        borderBottomWidth:2,
+        borderBottomWidth:1.5,
         borderBottomColor:'#645393'
+    },
+    noMission:{
+        fontFamily: 'nunito-semibold',
+        paddingLeft: 10,
+        fontSize: 18,
+        alignSelf:'center',
+        textAlign:'left',
+        color:'#645393',
+        fontWeight:'bold'        
     }
 })
 

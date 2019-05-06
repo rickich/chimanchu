@@ -13,8 +13,8 @@ export default class MissionCard extends React.Component{
                 this.props.navigation.navigate('MissionDetail',{'mission':mission,'mission_id':mission.id})}}
             style={styles.button}>
 
-            <Text style={styles.name}>{mission.title}</Text>
-            <Text style={styles.name}>{mission.amount}</Text>
+            <Text style={styles.title}>{mission.title}</Text>
+            <Text style={styles.amount}>{mission.amount}</Text>
 
             </TouchableOpacity>
             </View>
@@ -28,13 +28,19 @@ const styles = StyleSheet.create({
         height:25,
         alignSelf:'baseline',
       },
-      name:{
+      title:{
         paddingLeft: 5,
         fontSize: 18,
         alignSelf:'center',
         textAlign:'left',
         color:'#645393',
         fontWeight: "600",
+      },
+      amount:{
+        marginLeft:'auto',
+        marginRight:'3%',
+        fontSize: 18,
+        color:'#645393',
       },
       button:{
         width:'100%',
