@@ -38,7 +38,7 @@ export default class MissionScreen extends Component {
     };
     render() {
       streamer=this.props.navigation.getParam('streamer');
-      console.log(JSON.stringify(streamer))
+      console.log(JSON.stringify(this.props.navigation))
     return (
       <View>
         <View style={styles.profile}>
@@ -52,7 +52,7 @@ export default class MissionScreen extends Component {
         </View>
         <Header title="Missions" style={{width:'100%',alignContent:'center', }}/>
         <MissionFeed navigation={this.props.navigation}/>
-        <TouchableOpacity style={styles.button} onPress = {()=>{ this.props.navigation.navigate('CreateMission'),{'streamer':streamer}}}>
+        <TouchableOpacity style={styles.button} onPress = {()=>{ this.props.navigation.navigate('CreateMission',{'streamer':this.props.navigation.getParam('streamer')})}}>
                 <Text style={styles.button_txt}>Send New Mission</Text>
         </TouchableOpacity>
       </View>

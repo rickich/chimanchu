@@ -10,18 +10,15 @@ class MissionFeed extends Component {
         isLoading: true
     }
     componentDidMount(){
-       const streamer = this.props.navigation.getParam('streamer');
-       const streamerID = streamer.id
        this.setState({isLoading: false});
     }
-
-    returnNoMission(streamer){
-        <Text>NO MISSION</Text>
-        }
     
-    displayCurrentMission = () =>{
+    displayAllMissions = () =>{
+       const streamer = this.props.navigation.getParam('streamer');
+       const streamerID = streamer.id
+       console.log(this.props.missions)
         return this.props.missions.map(_mission => {
-            if(_mission.to_id==streamer.id){
+            if(_mission.to_id==streamerID){
             return(
             <MissionCard key={_mission.id} mission = {_mission} navigation={this.props.navigation}/>
             );
@@ -39,11 +36,8 @@ class MissionFeed extends Component {
         else{
         return (
             <ScrollView>
-                {/* <TouchableOpacity onPress={this.displayCurrentMission}><Text>Current</Text></TouchableOpacity>
-                <TouchableOpacity onPress={this.displayCurrentMission}><Text>Pending</Text></TouchableOpacity> */}
-                
                 <View style={styles.divide}></View>
-                {this.displayCurrentMission()}
+                {this.displayAllMissions()}
             </ScrollView>
         )
         }
@@ -58,8 +52,9 @@ const styles= StyleSheet.create({
 })
 
 const mapStateToProps = (state) =>  {
-    console.log(JSON.stringify(state.firestore.ordered.missions));
-     return{
+    console.log('from fireStore'+JSON.stringify(state.firestore.ordered.missions));
+
+    return{
         missions: state.firestore.ordered.missions 
     }
 }

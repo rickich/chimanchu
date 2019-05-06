@@ -4,6 +4,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { AuthSession } from 'expo';
 import axios from 'axios';
 import Loading from '../components/Loading'
+import {connect} from 'react-redux'
+import {loadUser} from '../actions/authActions'
 
 const TWITCH_APP_ID = 'vfno0i2im9fshlfil4hsyiq6esfnex'; 
 const REDIRECT_URL = AuthSession.getRedirectUrl();
@@ -23,7 +25,7 @@ function cacheImages(images) {
   });
 }
 
-export default class LoginScreen extends Component {
+class LoginScreen extends Component {
   static navigationOptions = {
     header: null
 }
@@ -116,8 +118,8 @@ export default class LoginScreen extends Component {
     }     
       this.getLiveStreams();
       this.getOfflineStreams();
-      this._loadAssetsAsync();
       this.setState({userData: data});
+      this.props.loadUser(this.state.userData);
   }
   getLiveStreams = ()=>{
     liveStreams =  this.state.streamer.filter(function(item){
@@ -143,16 +145,6 @@ export default class LoginScreen extends Component {
         }
       }
      }    
-  }
-  async _loadAssetsAsync() {
-    let prof_url_list = [];
-    
-    for (_streamer of this.state.followingStreamer){
-      prof_url_list.push(_streamer.profile_image_url);
-    }
-
-    const imageAssets = cacheImages(prof_url_list);
-    await Promise.all([...imageAssets]);
   }
 
   render() {
@@ -214,3 +206,10 @@ const styles = StyleSheet.create({
       
     }
 })
+const mapDispatchToProps = (dispatch) =>{
+  return{
+    loadUser: (user) => dispatch(loadUser(user))
+  }
+}
+
+export default connect(null,mapDispatchToProps)(LoginScreen)

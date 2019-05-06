@@ -1,51 +1,37 @@
 import React, { Component } from 'react'
 import { Text, View, StyleSheet,TouchableOpacity } from 'react-native'
 import Header from '../components/Header'
+import { connect } from 'react-redux';
+import {compose} from 'redux'
+import {firestoreConnect} from 'react-redux-firebase'
 
 
-export default class MissionDetailScreen extends Component {
-     static navigationOptions = ({navigation})=> {
-    const headerString = navigation.getParam('headerString');
+class MissionDetailScreen extends Component {
+    static navigationOptions = ({navigation})=> {
     return{
-    title: headerString,
+    title: 'MissionDetail',
     headerBackTitle:null,
-    
     }
 };
-  getOngoingMissionList(){
-    return this.state.rank.map(_rank => {
-        if(_rank.status=="ongoing"){
-        return(
-        <MissionCard key={_mission.id} mission = {_mission} navigation={this.props.navigation}/>
-        );
-        }
-    })
-    
+  componentDidMount(){
+    //this.props.findAMission(this.props.navigation.getParam('mission'));
   }
+
   render() {
-    const mission = this.props.navigation.getParam('mission')
     return (
       <View>
-        <Header title = {mission.info.title} />
-        <Text>{mission.info.detail}</Text>
-        <Text>Total Amount</Text>
-        <Text>{this.getTotalAmount(mission.info.amount)}</Text> 
+        <Header title = {this.props.mission.title} />
+        <Text>{this.props.mission.detail}</Text>
         <TouchableOpacity 
             onPress={()=>
                 {
-                this.props.navigation.navigate('AddToMission',{'mission':mission, 'headerString': "Add to a mission"})}}
+                this.props.navigation.navigate('AddToMission',{'mission':this.props.mission, 'mission_id':this.props.mission_id,'headerString': "Add to a mission"})}}
             style={styles.button}><Text>Add Bits</Text></TouchableOpacity>
       </View>
     )
   }
-  getTotalAmount(amt){
-    let sum=0;
-     for (let i = 0 ; i<amt.length; i++){
-        sum=sum+amt[i];
-    }
-    return sum;
 }
-}
+
 const styles = StyleSheet.create({
     button:{
       marginTop:15,
@@ -60,3 +46,23 @@ const styles = StyleSheet.create({
       color:'#645393',
     }
 })
+
+const mapStateToProps = (state,ownProps) =>  {
+  console.log('from fireStore in detail'+JSON.stringify(ownProps));
+  const id = ownProps.navigation.state.params.mission.id;
+  const missions = state.firestore.data.missions;
+  const ownMission = missions ? missions[id] : null; 
+  return{
+    mission: ownMission ,
+    mission_id:id
+  }
+}
+
+export default compose(
+  connect(mapStateToProps),
+  firestoreConnect([
+      {
+          collection: 'missions'
+      }
+  ])
+)(MissionDetailScreen)

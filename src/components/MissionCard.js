@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
-import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native'
-import { Ionicons } from '@expo/vector-icons';
+import React from 'react'
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native'
+
 
 export default class MissionCard extends React.Component{
     render(){
@@ -10,23 +10,15 @@ export default class MissionCard extends React.Component{
             <TouchableOpacity 
             onPress={()=>
                 {
-                this.props.navigation.navigate('MissionDetail',{'mission':mission, 'headerString': "Detail"})}}
+                this.props.navigation.navigate('MissionDetail',{'mission':mission})}}
             style={styles.button}>
 
             <Text style={styles.name}>{mission.title}</Text>
-            <Text style={styles.name}>{mission.amount}</Text>   
-            {/* {this.logMission(mission)}  */}
-            {this.displayIcon()}
+            <Text style={styles.name}>{mission.amount}</Text>
+
             </TouchableOpacity>
             </View>
             );
-   }
-   logMission(mission){
-       console.log("MISSION"+(mission.status))
-   }
-
-   displayIcon(){ 
-        return <Ionicons name="md-add" size={15} style={styles.icon} />
    }
 }
 
@@ -46,16 +38,22 @@ const styles = StyleSheet.create({
       },
       button:{
         width:'100%',
-        marginTop:15,
+        marginBottom:0,
+        paddingVertical: 12,
         padding: 5,
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignSelf:'center',
         alignContent: 'center',
         backgroundColor:'#ffffff',
-        borderWidth:1.5,
-        borderColor: '#645393',
         color:'#645393',
+        shadowColor:'#28334C',
+        shadowOffset:{
+          width:0.2,
+          height:0,
+        },
+        shadowOpacity:0.6,
+        shadowRadius:0.8,
       },
       icon:{
         marginLeft:'auto',
@@ -65,4 +63,5 @@ const styles = StyleSheet.create({
     
       }
 })
+
 

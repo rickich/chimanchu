@@ -11,7 +11,7 @@ export default class StreamerCard extends React.Component{
   }
 render(){ 
   streamer= this.props.streamer;
-
+  console.log(streamer)
   return (
       <View>
         <TouchableOpacity 

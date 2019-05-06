@@ -5,12 +5,14 @@ import { createMission } from '../actions/missionActions'
 import {connect} from 'react-redux'
 
 class CreateMissionScreen extends Component {
+  streamer = this.props.navigation.getParam('streamer');
+
   state ={
     title: '',
     detail: '',
     amount: '',
-    from_id: '',
-    to_id: '',
+    from_id: this.props.user.id,
+    to_id: streamer.id,
     status: 'pending',
   }
   render() {
@@ -24,8 +26,16 @@ class CreateMissionScreen extends Component {
     )
   }
   handlePost= () =>{
-    console.log('handleing post of >>>>'+JSON.stringify(this.props.streamer))
+    
+    console.log('handleing post of >>>>'+JSON.stringify(this.props.navigation.getParam('streamer')))
+    console.log('mission data: '+JSON.stringify(this.state))
     this.props.createMission(this.state)
+    this.props.navigation.navigate('MissionList')
+  }
+}
+const mapStateToProps = (state) =>{
+  return{
+    user: state.auth
   }
 }
 const mapDispatchToProps = (dispatch) =>{
@@ -34,4 +44,4 @@ const mapDispatchToProps = (dispatch) =>{
   }
 }
 
-export default connect(null,mapDispatchToProps)(CreateMissionScreen)
+export default connect(mapStateToProps,mapDispatchToProps)(CreateMissionScreen)
