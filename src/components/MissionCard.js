@@ -10,7 +10,7 @@ export default class MissionCard extends React.Component{
             <TouchableOpacity 
             onPress={()=>
                 {
-                this.props.navigation.navigate('MissionDetail',{'mission':mission})}}
+                this.props.navigation.navigate('MissionDetail',{'mission':mission,'mission_id':mission.id})}}
             style={styles.button}>
 
             <Text style={styles.name}>{mission.title}</Text>

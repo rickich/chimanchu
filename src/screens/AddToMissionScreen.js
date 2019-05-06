@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Text, View } from 'react-native'
 import { Input, Button } from 'react-native-elements'
-import { createMission } from '../actions/missionActions'
+import { createAddToMission } from '../actions/missionActions'
 import {connect} from 'react-redux'
 import {compose} from 'redux'
 import {firestoreConnect} from 'react-redux-firebase'
@@ -10,12 +10,11 @@ import {firestoreConnect} from 'react-redux-firebase'
 class AddToMissionScreen extends Component {
   streamer = this.props.navigation.getParam('streamer');
   state ={
-    detail: '',
     amount: '',
     from_id: this.props.user.id,
     to_id: streamer.id,
-    status: 'pending',
-    mission_id: this.props.mission.id
+    mission_id: this.props.mission_id,
+    from_name: this.props.user.displayName
   }
 
   render() {
@@ -24,18 +23,19 @@ class AddToMissionScreen extends Component {
         <Input editable={false} label='Title' keyboardType = 'default' value={this.props.mission.title}/>
         <Input editable={false} label='Detail' keyboardType = 'default' value={this.props.mission.detail}/>
         <Input editable={false} label='Amount' keyboardType = 'numeric' value={this.props.mission.amount}/>
-        <Input label='Comment' keyboardType = 'default' onChangeText={(text) => this.setState({detail: text})}/>
         <Input label='Adding Amount' keyboardType = 'numeric' onChangeText={(text) => this.setState({amount: text})}/>
-        <Button title='Submit Mission'  onPress={this.handlePost}></Button>
+        <Button title='Submit Mission'  onPress={() =>{
+          this.props.createAddToMission(this.state); 
+          this.props.navigation.navigate('MissionDetail',{'mission':this.props.mission})
+          }}></Button>
       </View>
     )
   }
   handlePost= () =>{
     
     console.log('handleing post of >>>>'+JSON.stringify(this.props.navigation.getParam('streamer')))
-    console.log('mission data: '+JSON.stringify(this.state))
+    console.log('mission data: '+JSON.stringify(this.state.from_name))
     //this.props.createMission(this.state)
-    this.props.navigation.navigate.goBack();
   }
 }
 const mapDispatchToProps = (dispatch) =>{
@@ -52,7 +52,8 @@ const mapStateToProps = (state,ownProps) =>  {
 
   return{
     mission: ownMission,
-    user: state.auth 
+    user: state.auth,
+    mission_id: id,
   }
 }
 

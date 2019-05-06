@@ -16,11 +16,11 @@ export const createAddToMission = (mission) => {
     return (dispatch, getState, { getFirebase,getFirestore }) => {
         // make async call to database
         const firestore = getFirestore();
-        firestore.collection('missions').add({
+        firestore.collection('added_to_mission').add({
             ...mission,
             createdAt: new Date(), 
         }).then(() => {
-            dispatch({type: 'CREATE_MISSION', mission });
+            dispatch({type: 'ADDED_TO_MISSION'});
         }).catch((err) => {
             dispatch({type: 'CREATE_MISSION_ERROR', err });
         })

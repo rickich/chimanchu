@@ -16,12 +16,28 @@ class MissionDetailScreen extends Component {
   componentDidMount(){
     //this.props.findAMission(this.props.navigation.getParam('mission'));
   }
-
+  displayAdded = () =>{
+    console.log('MISSIONS: '+JSON.stringify(this.props.addedMissions))
+    if(this.props.addedMissions!=null){
+      let missions = this.props.addedMissions
+      return missions.map(_mission => {
+        console.log(_mission['mission_id'])
+        console.log(this.props.mission_id)
+        if(_mission.mission_id == this.props.mission_id){
+          return(
+            <Text key={_mission.id}>ITS HERE!</Text>
+          );
+          }
+      })
+    }
+  }
   render() {
+    if(this.props.mission != undefined){
     return (
       <View>
         <Header title = {this.props.mission.title} />
         <Text>{this.props.mission.detail}</Text>
+        {this.displayAdded()}
         <TouchableOpacity 
             onPress={()=>
                 {
@@ -30,6 +46,12 @@ class MissionDetailScreen extends Component {
       </View>
     )
   }
+  else{
+    return(<View>
+      <Text>loading</Text>
+  </View>)
+  }
+}
 }
 
 const styles = StyleSheet.create({
@@ -48,13 +70,16 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = (state,ownProps) =>  {
-  console.log('from fireStore in detail'+JSON.stringify(ownProps));
-  const id = ownProps.navigation.state.params.mission.id;
+  console.log('from fireStore in detail'+JSON.stringify(state.firestore.data));
+  const id = ownProps.navigation.state.params.mission_id;
   const missions = state.firestore.data.missions;
   const ownMission = missions ? missions[id] : null; 
+  const addedMissions = state.firestore.ordered.added_to_mission;
+ 
   return{
     mission: ownMission ,
-    mission_id:id
+    mission_id:id,
+    addedMissions: addedMissions
   }
 }
 
@@ -62,7 +87,8 @@ export default compose(
   connect(mapStateToProps),
   firestoreConnect([
       {
-          collection: 'missions'
+          collection: 'missions',
+          collection: 'added_to_mission',
       }
   ])
 )(MissionDetailScreen)

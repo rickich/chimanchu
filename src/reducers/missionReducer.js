@@ -7,7 +7,7 @@ const initState = {
     status: 'pending',
     title: 'Chimanchu first mission',
     to_id: '49233748'   
-    
+     
 }
 const missionReducer = (state = initState, action) =>{
     switch(action.type){
@@ -17,11 +17,8 @@ const missionReducer = (state = initState, action) =>{
         case 'CREATE_MISSION_ERROR':
             console.log ('creatMission error', action.err);
             return state;
-        case 'UPDATE_MISSION_DETAIL':
-            return{
-                ...state,
-                ...action.data
-            }
+        case 'ADDED_TO_MISSION':
+            return state;
         default:
             return state;
     }
