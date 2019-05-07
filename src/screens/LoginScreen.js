@@ -9,22 +9,14 @@ import {loadUser} from '../actions/authActions'
 
 const TWITCH_APP_ID = 'vfno0i2im9fshlfil4hsyiq6esfnex'; 
 const REDIRECT_URL = AuthSession.getRedirectUrl();
-
+const TWITCH_SECRET = 'w8eaix5nyl36bjrmbwtzdxjv7g6861';
 let data = {
   "access_token": null,
   "user_id": null,
   "profile_url": null,
   "display_name": null,
-  "following_streamer_data": null,
+  "code": null,
 }
-function cacheImages(images) {
-  return images.map(image => {
-    if (typeof image === 'string') {
-      return Image.prefetch(image);
-    } 
-  });
-}
-
 class LoginScreen extends Component {
   static navigationOptions = {
     header: null
@@ -52,17 +44,40 @@ class LoginScreen extends Component {
   _handlePressAsync = async () => {
     let result = await AuthSession.startAsync({
       authUrl:
-      "https://id.twitch.tv/oauth2/authorize?client_id="+TWITCH_APP_ID+"&redirect_uri="+REDIRECT_URL+"&response_type=token&scope=viewing_activity_read+user_subscriptions+user:read:email",
-    });
+      "https://id.twitch.tv/oauth2/authorize?"+
+      "client_id="+TWITCH_APP_ID+
+      "&redirect_uri="+REDIRECT_URL+
+      "&response_type=code"+
+      "&scope=viewing_activity_read+user_subscriptions+user:read:email",
+    })
+
     //console.log('result = '+JSON.stringify(result));
+
     this.setState({ auth_result: result });
     if(this.state.auth_result['type']=='success'){
       console.log('AUTH_SUCCESS!' + JSON.stringify(this.state.auth_result));
-      data["access_token"]=this.state.auth_result.params['access_token'];
-      this._handleUserdata(data["access_token"]);
+      data["code"]=this.state.auth_result.params['code'];
+      this._getAccessToken(data['code']);
     };
   };
-
+  _getAccessToken = async (code) => {
+    this.setState({isLoading:true})
+    let result = await axios.post('https://id.twitch.tv/oauth2/token'+
+    '?client_id='+TWITCH_APP_ID+
+    '&client_secret='+TWITCH_SECRET+
+    '&code='+code+
+    '&grant_type=authorization_code'+
+    '&redirect_uri='+REDIRECT_URL).then((response)=>{
+      console.log(response.data);
+      data['access_token'] =response.data.access_token;
+    }).catch(function (error){
+      console.log(error);
+    });
+    this._handleUserdata(data["access_token"]);
+  }
+ 
+ 
+ 
   _handleUserdata = async (access_token) =>{  
     this.setState({isLoading:true})  
     let result = await axios.get('https://api.twitch.tv/helix/users',{

@@ -1,1 +1,214 @@
-{"mission":{"missions":{"abc":{"amount":"155","detail":"mission detail provided here","from_id":"1234567","status":"pending","title":"Chimanchu first mission","to_id":"49233748"},"acc":{"amount":"44","detail":"mission detail provided here","from_id":"1234567","status":"current","title":"Chimanchu second mission","to_id":"49233748"},"bbc":{"amount":"155","detail":"mission detail provided here","from_id":"1234567","status":"pending","title":"Chimanchu third mission","to_id":"9999999"}}},"auth":{"user":{"displayName":"display_name","id":"id","profileUrl":"profile_url","access_token":"access_token"},"followingStreamer":{}},"firestore":{"status":{"requesting":{"missions":false},"requested":{"missions":true},"timestamps":{"missions":1556961021208}},"data":{"missions":{"IcK16VikBR0hUMQwIjeB":{"amount":"122","createdAt":{"seconds":1556959887,"nanoseconds":641000000},"detail":"Www","from_id":222222,"status":"pending","title":"Asdf","to_id":1234555},"Mkibp9htFBOLXRys0crF":{"amount":"122","createdAt":{"seconds":1556959890,"nanoseconds":105000000},"detail":"Www","from_id":222222,"status":"pending","title":"Asdf","to_id":1234555},"aiIpWE0aSNY7A11vpDh3":{"amount":155,"detail":"mission detail","from_id":"userID","status":"pending","title":"Mission Title","to_id":"streamerID"},"hmQIS0a3kX2OQYG5oqYN":{"amount":"122","createdAt":{"seconds":1556959790,"nanoseconds":83000000},"detail":"Www","from_id":222222,"status":"pending","title":"Asdf","to_id":1234555},"oixAsYavf6raxT3K61LH":{"amount":"122","createdAt":{"seconds":1556959905,"nanoseconds":905000000},"detail":"Www","from_id":222222,"status":"pending","title":"Asdf","to_id":1234555},"ssbi9wWQl1wQ1gEnB8kx":{"amount":"122","createdAt":{"seconds":1556959901,"nanoseconds":981000000},"detail":"Www","from_id":222222,"status":"pending","title":"Asdf","to_id":1234555},"6U3RKP0xqIw3jnJDXGTx":{"amount":"44","createdAt":{"seconds":1556961028,"nanoseconds":565000000},"detail":"2333","from_id":222222,"status":"pending","title":"Qweree","to_id":138009898}}},"ordered":{"missions":[{"id":"6U3RKP0xqIw3jnJDXGTx","amount":"44","createdAt":{"seconds":1556961028,"nanoseconds":565000000},"detail":"2333","from_id":222222,"status":"pending","title":"Qweree","to_id":138009898},{"id":"IcK16VikBR0hUMQwIjeB","amount":"122","createdAt":{"seconds":1556959887,"nanoseconds":641000000},"detail":"Www","from_id":222222,"status":"pending","title":"Asdf","to_id":1234555},{"id":"Mkibp9htFBOLXRys0crF","amount":"122","createdAt":{"seconds":1556959890,"nanoseconds":105000000},"detail":"Www","from_id":222222,"status":"pending","title":"Asdf","to_id":1234555},{"id":"aiIpWE0aSNY7A11vpDh3","amount":155,"detail":"mission detail","from_id":"userID","status":"pending","title":"Mission Title","to_id":"streamerID"},{"id":"hmQIS0a3kX2OQYG5oqYN","amount":"122","createdAt":{"seconds":1556959790,"nanoseconds":83000000},"detail":"Www","from_id":222222,"status":"pending","title":"Asdf","to_id":1234555},{"id":"oixAsYavf6raxT3K61LH","amount":"122","createdAt":{"seconds":1556959905,"nanoseconds":905000000},"detail":"Www","from_id":222222,"status":"pending","title":"Asdf","to_id":1234555},{"id":"ssbi9wWQl1wQ1gEnB8kx","amount":"122","createdAt":{"seconds":1556959901,"nanoseconds":981000000},"detail":"Www","from_id":222222,"status":"pending","title":"Asdf","to_id":1234555}]},"listeners":{"byId":{"missions":{"name":"missions"}},"allIds":["missions"]},"errors":{"byQuery":{},"allIds":[]},"queries":{}}}
+{
+    "missions": {
+        "309AVrzBuPy3UxpkFmqo": {
+            "amount": "333",
+            "createdAt": {
+                "seconds": 1557133572,
+                "nanoseconds": 907000000
+            },
+            "from_id": "225603498",
+            "mission_id": "imV5RNc0oc5udlDAji17",
+            "to_id": "101735242"
+        },
+        "6U3RKP0xqIw3jnJDXGTx": {
+            "amount": "44",
+            "createdAt": {
+                "seconds": 1556961028,
+                "nanoseconds": 565000000
+            },
+            "detail": "2333",
+            "from_id": 222222,
+            "status": "pending",
+            "title": "Qweree",
+            "to_id": 138009898
+        },
+        "BOyinY6gBaP0qabVTSS6": {
+            "amount": "12345678",
+            "createdAt": {
+                "seconds": 1556964423,
+                "nanoseconds": 269000000
+            },
+            "detail": "Firebase firestore finally works!",
+            "from_id": 222222,
+            "status": "pending",
+            "title": "Fire base Works!!",
+            "to_id": 138009898
+        },
+        "FeiYWkSdKiCcYzqzkheA": {
+            "amount": "11",
+            "createdAt": {
+                "seconds": 1557120896,
+                "nanoseconds": 228000000
+            },
+            "detail": "22",
+            "from_id": "225603498",
+            "status": "pending",
+            "title": "Ff",
+            "to_id": "138657621"
+        },
+        "GdGTgzlbblVCDijWWavq": {
+            "amount": "12333",
+            "createdAt": {
+                "seconds": 1556964171,
+                "nanoseconds": 961000000
+            },
+            "detail": "ㅋㅋㅋㅋ 치킨시 만원",
+            "from_id": 222222,
+            "status": "pending",
+            "title": "치킨시 만원",
+            "to_id": 138009898
+        },
+        "IcK16VikBR0hUMQwIjeB": {
+            "amount": "122",
+            "createdAt": {
+                "seconds": 1556959887,
+                "nanoseconds": 641000000
+            },
+            "detail": "Www",
+            "from_id": 222222,
+            "status": "pending",
+            "title": "Asdf",
+            "to_id": 1234555
+        },
+        "Mkibp9htFBOLXRys0crF": {
+            "amount": "122",
+            "createdAt": {
+                "seconds": 1556959890,
+                "nanoseconds": 105000000
+            },
+            "detail": "Www",
+            "from_id": 222222,
+            "status": "pending",
+            "title": "Asdf",
+            "to_id": 1234555
+        },
+        "SNPvwckQyOFBr93CavmH": {
+            "amount": "111",
+            "createdAt": {
+                "seconds": 1557117222,
+                "nanoseconds": 866000000
+            },
+            "detail": "We",
+            "from_id": 222222,
+            "status": "pending",
+            "title": "Did",
+            "to_id": 138009898
+        },
+        "STY82jTkXcqYPeFFwhAx": {
+            "amount": "11",
+            "createdAt": {
+                "seconds": 1557121361,
+                "nanoseconds": 441000000
+            },
+            "detail": "Haha",
+            "from_id": "225603498",
+            "status": "pending",
+            "title": "Hoho",
+            "to_id": "101735242"
+        },
+        "WYcYda4QOduiPWrgO5zM": {
+            "amount": "123123",
+            "createdAt": {
+                "seconds": 1557117455,
+                "nanoseconds": 649000000
+            },
+            "detail": "제목",
+            "from_id": 222222,
+            "status": "pending",
+            "title": "킬당 3억",
+            "to_id": 138009898
+        },
+        "XuoG9z6kIGmDcfzG4Ou3": {
+            "amount": "123",
+            "createdAt": {
+                "seconds": 1557120584,
+                "nanoseconds": 188000000
+            },
+            "detail": "11",
+            "from_id": "",
+            "status": "pending",
+            "title": "Free",
+            "to_id": ""
+        },
+        "aiIpWE0aSNY7A11vpDh3": {
+            "amount": 155,
+            "detail": "mission detail",
+            "from_id": "userID",
+            "status": "pending",
+            "title": "Mission Title",
+            "to_id": "streamerID"
+        },
+        "ar0zy4pC0WBUtmk5hfWM": {
+            "amount": "123",
+            "createdAt": {
+                "seconds": 1556964100,
+                "nanoseconds": 433000000
+            },
+            "detail": "Tttt",
+            "from_id": 222222,
+            "status": "pending",
+            "title": "Ss",
+            "to_id": 138009898
+        },
+        "hmQIS0a3kX2OQYG5oqYN": {
+            "amount": "122",
+            "createdAt": {
+                "seconds": 1556959790,
+                "nanoseconds": 83000000
+            },
+            "detail": "Www",
+            "from_id": 222222,
+            "status": "pending",
+            "title": "Asdf",
+            "to_id": 1234555
+        },
+        "imV5RNc0oc5udlDAji17": {
+            "amount": "11",
+            "createdAt": {
+                "seconds": 1557127842,
+                "nanoseconds": 205000000
+            },
+            "detail": "12",
+            "from_id": "225603498",
+            "status": "pending",
+            "title": "Asdf",
+            "to_id": "101735242"
+        },
+        "mbZRmygwlT54TBELZLNB": {
+            "amount": "123",
+            "createdAt": {
+                "seconds": 1557121307,
+                "nanoseconds": 906000000
+            },
+            "detail": "WWWW",
+            "from_id": "225603498",
+            "status": "pending",
+            "title": "Wee",
+            "to_id": "101735242"
+        },
+        "oixAsYavf6raxT3K61LH": {
+            "amount": "122",
+            "createdAt": {
+                "seconds": 1556959905,
+                "nanoseconds": 905000000
+            },
+            "detail": "Www",
+            "from_id": 222222,
+            "status": "pending",
+            "title": "Asdf",
+            "to_id": 1234555
+        },
+        "ssbi9wWQl1wQ1gEnB8kx": {
+            "amount": "122",
+            "createdAt": {
+                "seconds": 1556959901,
+                "nanoseconds": 981000000
+            },
+            "detail": "Www",
+            "from_id": 222222,
+            "status": "pending",
+            "title": "Asdf",
+            "to_id": 1234555
+        }
+    }
+}
