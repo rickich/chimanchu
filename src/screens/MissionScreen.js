@@ -23,7 +23,7 @@ export default class MissionScreen extends Component {
           fontFamily:'noto',
           fontSize:14,
           color:'#fff',
-        }}>Hi,{userdata.display_name} </Text></TouchableOpacity>,
+        }}>LOGOUT </Text></TouchableOpacity>,
         headerRightContainerStyle:{
             paddingRight:10,
         },

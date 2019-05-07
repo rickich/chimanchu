@@ -25,7 +25,7 @@ class AddToMissionScreen extends Component {
       fontFamily:'noto',
       fontSize:14,
       color:'#fff',
-    }}>Hi,{userdata.display_name} </Text></TouchableOpacity>,
+    }}>LOGOUT</Text></TouchableOpacity>,
     headerRightContainerStyle:{
         paddingRight:10,
     },
@@ -37,7 +37,7 @@ class AddToMissionScreen extends Component {
     from_id: this.props.user.id,
     to_id: streamer.id,
     mission_id: this.props.mission_id,
-    from_name: this.props.user.displayName
+    from_name: this.props.twitch_user_data.displayName
   }
 
   render() {
@@ -141,6 +141,7 @@ const mapStateToProps = (state,ownProps) =>  {
     mission: ownMission,
     user: state.auth,
     mission_id: id,
+    twitch_user_data:state.twitch
   }
 }
 

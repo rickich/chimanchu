@@ -1,16 +1,19 @@
 import React, { Component } from 'react'
-import { TouchableOpacity, Text, View, StyleSheet } from 'react-native'
+import { TouchableOpacity, Text, View, StyleSheet,AsyncStorage } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
 import { AuthSession } from 'expo';
 import axios from 'axios';
 import Loading from '../components/Loading'
+import {setUser} from '../actions/authActions'
 import {connect} from 'react-redux'
-import {loadUser} from '../actions/authActions'
+import {firestoreConnect} from 'react-redux-firebase'
+import {compose} from 'redux'
 
 const TWITCH_APP_ID = 'vfno0i2im9fshlfil4hsyiq6esfnex'; 
 const REDIRECT_URL = AuthSession.getRedirectUrl();
 const TWITCH_SECRET = 'w8eaix5nyl36bjrmbwtzdxjv7g6861';
 let data = {
+  'token': null,
   "access_token": null,
   "user_id": null,
   "profile_url": null,
@@ -20,27 +23,9 @@ let data = {
 class LoginScreen extends Component {
   static navigationOptions = {
     header: null
-}
-  state = {userTwitchData: [],auth_result: [],followingStreamer: [],streamer: []};
- 
-  render() {
-    if (this.state.isLoading){
-      return <Loading />
-    }
-  
-    return (
-      <View style={styles.container}>
-        <Text style={styles.title_text}> ChiManChu </Text>
-        <TouchableOpacity 
-        onPress={this._handlePressAsync} 
-        style={styles.button}
-        >
-        <Ionicons name="logo-twitch" size={28} style={styles.logo} />
-        <Text style={styles.text}>Login with Twitch</Text>
-        </TouchableOpacity>
-      </View>
-    )
   }
+  state = {auth_result: []};
+
   _handlePressAsync = async () => {
     let result = await AuthSession.startAsync({
       authUrl:
@@ -50,118 +35,83 @@ class LoginScreen extends Component {
       "&response_type=code"+
       "&scope=viewing_activity_read+user_subscriptions+user:read:email",
     })
-
-    //console.log('result = '+JSON.stringify(result));
-
     this.setState({ auth_result: result });
+
     if(this.state.auth_result['type']=='success'){
       console.log('AUTH_SUCCESS!' + JSON.stringify(this.state.auth_result));
       data["code"]=this.state.auth_result.params['code'];
       this._getAccessToken(data['code']);
     };
   };
+
   _getAccessToken = async (code) => {
     this.setState({isLoading:true})
     let result = await axios.post('https://id.twitch.tv/oauth2/token'+
-    '?client_id='+TWITCH_APP_ID+
-    '&client_secret='+TWITCH_SECRET+
-    '&code='+code+
-    '&grant_type=authorization_code'+
-    '&redirect_uri='+REDIRECT_URL).then((response)=>{
+      '?client_id='+TWITCH_APP_ID+
+      '&client_secret='+TWITCH_SECRET+
+      '&code='+code+
+      '&grant_type=authorization_code'+
+      '&redirect_uri='+REDIRECT_URL)
+    .then((response)=>{
       console.log(response.data);
+      data['token']=response.data;
       data['access_token'] =response.data.access_token;
-    }).catch(function (error){
+      // this._handleUserdata(data["access_token"]);
+      this._validateToken(data['access_token']);
+    })
+    .catch(function (error){
       console.log(error);
     });
-    this._handleUserdata(data["access_token"]);
   }
- 
- 
- 
-  _handleUserdata = async (access_token) =>{  
-    this.setState({isLoading:true})  
-    let result = await axios.get('https://api.twitch.tv/helix/users',{
-            headers:{'Authorization': 'Bearer '+access_token}
+
+  _validateToken = async (access_token) =>{
+    let result = await axios.get('https://id.twitch.tv/oauth2/validate',{
+            headers:{'Authorization': 'OAuth '+access_token}
+            })
+            .then((result) => 
+              { 
+                this.storeData(result.data.user_id,data['token'])
+                this.checkUser(result.data.user_id)           
+              }
+            )
+            .catch(function(error){
+              console.log(error)
             });
-        this.setState({ userTwitchData: result.data.data[0]});
-        this._handleUserFollower(access_token);
   }
 
-  _handleUserFollower = async (access_token) =>{
-    let result = await axios.get('https://api.twitch.tv/helix/users/follows?first=100&from_id='+this.state.userTwitchData["id"],{
-      headers:{'Authorization': 'Bearer '+access_token}
-      });
-    this.setState({ followingStreamer: result.data.data});
-    this._handleFollowingStreamerData(access_token);
-   //
-  }
-
-  _handleFollowingStreamerData =  async (access_token) => {
-    let query1 = 'https://api.twitch.tv/helix/users?' //to get userID for each following streamer
-    let query2 = 'https://api.twitch.tv/helix/streams?first=100&' //to get data for each of their most recent broadcast to see if they are currently live
-    
-    for (_streamer of this.state.followingStreamer){
-      id = _streamer.to_id
-      query1 = query1+"id="+id+"&"
-      query2 = query2+"user_id="+id+"&"
+  storeData = async (userID,token) => {
+    try {
+      await AsyncStorage.setItem('currentUserID', userID)
+      await AsyncStorage.setItem('access_token', token.access_token)
+      await AsyncStorage.setItem('refresh_token', token.refresh_token)  
+    } catch (e) {
+      console.log(e)
     }
+  }
 
-    let result = await axios.get(query1,{
-      headers:{'Authorization': 'Bearer '+access_token}
-      });
-    this.setState({ streamer: result.data.data }); 
-
-    let broadcastInfo = await axios.get(query2,{
-        headers:{'Authorization': 'Bearer '+access_token}
-        });
-    await this.setState({ streamerBroadcastData: broadcastInfo.data.data}); 
-    await this.isStreamLive();
-    await this.cleanUpData();
-    //console.log(JSON.stringify(this.state.streamer))
-    setTimeout(() => {
-      this.setState({isLoading: false})
-      this.props.navigation.navigate("StreamerList",{'user_data':this.state.userData,'stream_data':this.state.streamer});
-    }, 1000)
-  }
-  
-  cleanUpData= async () => {
-    data = {
-      "access_token": this.state.auth_result.params['access_token'],
-      "user_id": this.state.userTwitchData["id"],
-      "profile_url": this.state.userTwitchData["profile_image_url"],
-      "display_name": this.state.userTwitchData["display_name"],
-    }     
-      this.getLiveStreams();
-      this.getOfflineStreams();
-      this.setState({userData: data});
-      this.props.loadUser(this.state.userData);
-  }
-  getLiveStreams = ()=>{
-    liveStreams =  this.state.streamer.filter(function(item){
-      return item.isLive == true;
-    });
-  }
-  getOfflineStreams = ()=>{
-    offlineStreams =  this.state.streamer.filter(function(item){
-      return item.isLive == false;
-    });
-  }
-  isStreamLive = () =>{
-    for(_streamer of this.state.streamer){
-      _streamer.isLive = false;
-    }
-
-    for(_livestream of this.state.streamerBroadcastData){
-      for(_streamer of this.state.streamer){
-        if(_livestream['user_id']===_streamer['id']){
-          _streamer.isLive = true;
-          console.log(_livestream['user_name']);
-          break;
-        }
+ checkUser = (id) =>{
+   //query users that has id
+   //if no return / create user
+   //else 
+   console.log(this.props.users)
+    let user = null;
+    this.props.users.map(_user => {
+      if(_user.id == id){
+          user = _user;
       }
-     }    
+    });
+    if (user==null){
+      console.log('user doesnt exist');
+      this.props.setUser(id,data['token'])
+      this.props.navigation.navigate('AuthLoading');
+    }
+    else{
+      console.log('user exists!')
+      this.props.setUser(id,data['token']);
+      this.props.navigation.navigate('AuthLoading');
+    }
   }
-
+    
   render() {
     if (this.state.isLoading){
       return <Loading />
@@ -181,7 +131,6 @@ class LoginScreen extends Component {
     )
   }
 }
-
 
 const styles = StyleSheet.create({
     container:{
@@ -221,10 +170,24 @@ const styles = StyleSheet.create({
       
     }
 })
+const mapStateToProps = (state) =>  {
+  console.log('from fireStore'+JSON.stringify(state));
+  const allUsers = state.firestore.data.users;
+  return{
+      users: state.firestore.ordered.users 
+  }
+}
 const mapDispatchToProps = (dispatch) =>{
   return{
-    loadUser: (user) => dispatch(loadUser(user))
+    setUser: (userID,token) => dispatch(setUser(userID,token)),
   }
 }
 
-export default connect(null,mapDispatchToProps)(LoginScreen)
+export default compose(
+  connect(mapStateToProps,mapDispatchToProps),
+  firestoreConnect([
+    {
+        collection: 'users'
+    }
+  ])
+)(LoginScreen)

@@ -4,11 +4,7 @@ import { Octicons } from '@expo/vector-icons';
 
 
 export default class StreamerCard extends React.Component{
-  static navigationOptions = ({navigation}) => {
-    return{
-      headerBackTitle:null,
-    }
-  }
+  
 render(){ 
   streamer= this.props.streamer;
   console.log(streamer)

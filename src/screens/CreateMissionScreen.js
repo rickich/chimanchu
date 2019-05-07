@@ -22,7 +22,7 @@ class CreateMissionScreen extends Component {
       fontFamily:'noto',
       fontSize:14,
       color:'#fff',
-    }}>Hi,{userdata.display_name} </Text></TouchableOpacity>,
+    }}>LOGOUT</Text></TouchableOpacity>,
     headerRightContainerStyle:{
         paddingRight:10,
     },
@@ -37,7 +37,7 @@ class CreateMissionScreen extends Component {
     from_id: this.props.user.id,
     to_id: streamer.id,
     status: 'pending',
-    from_name: this.props.user.displayName
+    from_name: this.props.twitch_user_data.displayName
   }
   render() {
     return (
@@ -50,7 +50,7 @@ class CreateMissionScreen extends Component {
     )
   }
   handlePost= () =>{
-    
+    this.setState({from_id: this.props.user.id,from_name:this.props.twitch_user_data.displayName})
     console.log('handleing post of >>>>'+JSON.stringify(this.props.navigation.getParam('streamer')))
     console.log('mission data: '+JSON.stringify(this.state))
     this.props.createMission(this.state)
@@ -123,7 +123,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) =>{
   return{
-    user: state.auth
+    user: state.auth,
+    twitch_user_data:state.twitch
   }
 }
 const mapDispatchToProps = (dispatch) =>{

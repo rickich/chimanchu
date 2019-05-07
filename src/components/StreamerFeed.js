@@ -3,15 +3,15 @@ import { ScrollView,StyleSheet,View, TouchableOpacity,Text } from 'react-native'
 import OfflineStreamerCard from './OfflineStreamerCard'
 import StreamerCard from './StreamerCard'
 import Header from './Header'
+import {connect} from 'react-redux'
 
-export default class StreamerFeed extends Component {
-    static navigationOptions = ({navigation}) => {
-        return{
-          headerBackTitle:null,
-       }
+class StreamerFeed extends Component {
+    constructor (props){
+        super(props);
     }
+
     getLiveStreamerList(){
-        return this.props.navigation.getParam('stream_data').map(_streamer => {
+        return this.props.streamers.map(_streamer => {
             if(_streamer.isLive){
                 return(
                     <StreamerCard key={_streamer['id']} streamer = {_streamer} navigation={this.props.navigation}/>
@@ -21,7 +21,7 @@ export default class StreamerFeed extends Component {
         
     }
     getOfflineStreamerList(){
-        return this.props.navigation.getParam('stream_data').map(_streamer => {
+        return this.props.streamers.map(_streamer => {
             if(!_streamer.isLive){
                 return(
                     <OfflineStreamerCard key={_streamer['id']} streamer = {_streamer} navigation={this.props.navigation}/>
@@ -32,17 +32,24 @@ export default class StreamerFeed extends Component {
 
 
     render() {
-        return (
-            <ScrollView style={styles.background}>
-                <Header title="Live" />
-                <View style={styles.divide}></View>
-                {this.getLiveStreamerList()}
-                <Header title="Offline"/>
-                <View style={styles.divide}></View>
-                {this.getOfflineStreamerList()}
-            </ScrollView>
-            
-        );  
+        if(this.props.streamers == undefined){
+            return(<View>
+                <Text>loading</Text>
+            </View>)
+        }
+        else{
+            return (
+                <ScrollView style={styles.background}>
+                    <Header title="Live" />
+                    <View style={styles.divide}></View>
+                    {this.getLiveStreamerList()}
+                    <Header title="Offline"/>
+                    <View style={styles.divide}></View>
+                    {this.getOfflineStreamerList()}
+                </ScrollView>
+                
+            )
+        }
     }
 }
 const styles= StyleSheet.create({
@@ -55,3 +62,12 @@ const styles= StyleSheet.create({
         borderBottomColor:'#a9a0c0'
     }
 })
+const mapStateToProps = (state) =>  {
+    //console.log('loading state of'+JSON.stringify(state.twitch))
+    return{
+        streamers: state.twitch.followingStreamers
+    }
+}
+
+
+export default connect(mapStateToProps)(StreamerFeed)

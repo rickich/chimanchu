@@ -1,6 +1,14 @@
-export const loadUser = (result) => {   
-    return (dispatch) =>{ 
-        console.log('update action called for token: '+JSON.stringify(result));
-        dispatch({type: 'LOAD_USER', result})
-    };
+export const setUser = (id,token) => {
+    return (dispatch, getState, { getFirebase,getFirestore }) => {
+        // make async call to database
+        const firestore = getFirestore();
+        firestore.collection('users').doc(id).set({
+            token:{...token},
+            createdAt: new Date(), 
+        }).then(() => {
+            dispatch({type: 'CREATE_USER', id });
+        }).catch((err) => {
+            dispatch({type: 'ERROR', err });
+        })
+    }
 };
