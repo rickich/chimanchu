@@ -22,8 +22,24 @@ const AppStackNavigator = createStackNavigator({
     },
     AddToMission:{
         screen: AddToMissionScreen,
-    }
-  });
+    },
+
+  },
+  {
+    defaultNavigationOptions:{
+        headerStyle:{
+            backgroundColor:'#645393',
+        },
+        headerLeftContainerStyle:{
+            paddingLeft:10,
+        },
+        headerRightContainerStyle:{
+            paddingRight:10,
+        },
+        headerBackTitle:null,
+        headerTintColor: '#fff',        
+    },
+});
   
 const AuthStackNavigator = createStackNavigator({
     Login:{
@@ -37,12 +53,7 @@ const AppContainer = createAppContainer(createSwitchNavigator({
     App:AppStackNavigator,
 },{
     initialRouteName: 'AuthLoading',
-    headerStyle: {
-        backgroundColor: '#123444',
-        borderBottomWidth:3,
-        borderBottomColor:"#123444",
-        borderBottomRadius:10,
-      },
+    
 }));
 
 export default AppContainer;

@@ -1,19 +1,15 @@
 import React, { Component } from 'react'
 import { Text,TouchableOpacity, StyleSheet, View } from 'react-native'
-import { Input, Button } from 'react-native-elements'
+import { Input } from 'react-native-elements'
 import { createMission } from '../actions/missionActions'
 import {connect} from 'react-redux'
+
 
 class CreateMissionScreen extends Component {
   static navigationOptions = ({navigation})=> {
       
     return{
     title: 'Missions',
-    headerBackTitle:null,
-    headerTintColor: '#fff',
-    headerStyle:{
-      backgroundColor:'#645393',
-     },
     headerRight: <TouchableOpacity style={{
     width:'100%',
     }}
@@ -23,9 +19,6 @@ class CreateMissionScreen extends Component {
       fontSize:14,
       color:'#fff',
     }}>LOGOUT</Text></TouchableOpacity>,
-    headerRightContainerStyle:{
-        paddingRight:10,
-    },
     }
 };
   streamer = this.props.navigation.getParam('streamer');
@@ -34,6 +27,7 @@ class CreateMissionScreen extends Component {
     title: '',
     detail: '',
     amount: '',
+    total_amount:'',
     from_id: this.props.user.id,
     to_id: streamer.id,
     status: 'pending',
@@ -44,7 +38,7 @@ class CreateMissionScreen extends Component {
       <View>
         <Input labelStyle={styles.label} containerStyle={styles.inputContainer} inputContainerStyle={styles.title} label='Title' keyboardType = 'default' onChangeText={(text) => this.setState({title: text})}/>
         <Input labelStyle={styles.label} containerStyle={styles.inputContainer} inputContainerStyle={styles.title}label='Detail' keyboardType = 'default' onChangeText={(text) => this.setState({detail: text})}/>
-        <Input labelStyle={styles.label} containerStyle={styles.inputContainer} inputContainerStyle={styles.title} label='Amount' keyboardType = 'numeric' onChangeText={(text) => this.setState({amount: text})}/>
+        <Input labelStyle={styles.label} containerStyle={styles.inputContainer} inputContainerStyle={styles.title} label='Amount' keyboardType = 'numeric' onChangeText={(text) => this.setState({amount: text,total_amount: text})}/>
         <TouchableOpacity style = {styles.button} onPress={this.handlePost}><Text style={styles.button_txt}>Submit Mission</Text></TouchableOpacity>
       </View>
     )

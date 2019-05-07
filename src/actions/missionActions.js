@@ -1,3 +1,4 @@
+
 export const createMission = (mission) => {
     return (dispatch, getState, { getFirebase,getFirestore }) => {
         // make async call to database
@@ -12,10 +13,15 @@ export const createMission = (mission) => {
         })
     }
 };
-export const createAddToMission = (mission) => {
+export const createAddToMission = (mission,newTot) => {
     return (dispatch, getState, { getFirebase,getFirestore }) => {
         // make async call to database
         const firestore = getFirestore();
+        console.log(mission.total_amount)
+        firestore.collection('missions').doc(mission.mission_id).update({
+            total_amount: newTot,
+            lastModified: new Date(),
+        })
         firestore.collection('added_to_mission').add({
             ...mission,
             createdAt: new Date(), 

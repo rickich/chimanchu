@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView,StyleSheet,View, TouchableOpacity,Text } from 'react-native'
+import { ScrollView,StyleSheet,View, RefreshControl } from 'react-native'
 import OfflineStreamerCard from './OfflineStreamerCard'
 import StreamerCard from './StreamerCard'
 import Header from './Header'
@@ -8,8 +8,10 @@ import {connect} from 'react-redux'
 class StreamerFeed extends Component {
     constructor (props){
         super(props);
+        this.state = {
+            refreshing: false,
+        }
     }
-
     getLiveStreamerList(){
         return this.props.streamers.map(_streamer => {
             if(_streamer.isLive){
@@ -32,14 +34,8 @@ class StreamerFeed extends Component {
 
 
     render() {
-        if(this.props.streamers == undefined){
-            return(<View>
-                <Text>loading</Text>
-            </View>)
-        }
-        else{
             return (
-                <ScrollView style={styles.background}>
+                <ScrollView>
                     <Header title="Live" />
                     <View style={styles.divide}></View>
                     {this.getLiveStreamerList()}
@@ -49,7 +45,7 @@ class StreamerFeed extends Component {
                 </ScrollView>
                 
             )
-        }
+        
     }
 }
 const styles= StyleSheet.create({

@@ -12,3 +12,9 @@ export const setUser = (id,token) => {
         })
     }
 };
+
+export const updateUser = (id) =>{
+    return (dispatch) =>{
+        dispatch({type:'UPDATE_USER',id})
+    }
+}

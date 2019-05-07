@@ -1,4 +1,3 @@
-import { database } from "firebase";
 
 const initState = {
     amount: '155',

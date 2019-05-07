@@ -14,7 +14,7 @@ export default class MissionCard extends React.Component{
             style={styles.button}>
 
             <Text style={styles.title}>{mission.title}</Text>
-            <Text style={styles.amount}>{mission.amount}</Text>
+            <Text style={styles.amount}>{mission.total_amount}</Text>
 
             </TouchableOpacity>
             </View>

@@ -11,10 +11,6 @@ export default class MissionScreen extends Component {
         return{
         title: null,
         headerBackTitle:null,
-        headerTintColor: '#fff',
-        headerStyle:{
-          backgroundColor:'#645393',
-         },
         headerRight: <TouchableOpacity style={{
         width:'100%',
         }}
@@ -24,9 +20,6 @@ export default class MissionScreen extends Component {
           fontSize:14,
           color:'#fff',
         }}>LOGOUT </Text></TouchableOpacity>,
-        headerRightContainerStyle:{
-            paddingRight:10,
-        },
         }
     };
     state = {

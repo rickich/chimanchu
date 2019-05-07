@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
-import { View , StyleSheet, Text, TouchableOpacity, AsyncStorage} from 'react-native'
+import { View , StyleSheet, Text, TouchableOpacity, AsyncStorage, ScrollView, RefreshControl} from 'react-native'
 import Header from '../components/Header'
 import StreamerFeed from '../components/StreamerFeed'
+import {updateUser} from '../actions/authActions'
 import {loadTwitchData} from '../actions/twitchActions'
 import {connect} from 'react-redux'
 import {firestoreConnect} from 'react-redux-firebase'
 import {compose} from 'redux'
 import axios from 'axios';
-
+import Loading from '../components/Loading'
 
 const TWITCH_APP_ID = 'vfno0i2im9fshlfil4hsyiq6esfnex'; 
 const TWITCH_SECRET = 'w8eaix5nyl36bjrmbwtzdxjv7g6861';
@@ -16,24 +17,29 @@ const currentUserID = AsyncStorage.getItem('currentUserID');
 class StreamerListScreen extends Component {
   constructor (props){
     super(props);
-    this.state = {isLoading:true,user:''}
+    this.state = {isLoading:true,user:'',refreshing:false,}
     this._bootstrapAsync();
   }
   _bootstrapAsync = async () => {
-    const currentUserID = await AsyncStorage.getItem('currentUserID');
     const access_token = await AsyncStorage.getItem('access_token');
     const refresh_token = await AsyncStorage.getItem('refresh_token');
 
     this._validateToken(access_token,refresh_token);
   }
   
-
+  _refreshData = async () =>{
+    const access_token = await AsyncStorage.getItem('access_token');
+    const refresh_token = await AsyncStorage.getItem('refresh_token');
+    this.setState({refreshing:true});
+    this._validateToken(access_token,refresh_token);
+  }
   _validateToken = async (access_token,refresh_token) =>{
     let result = await axios.get('https://id.twitch.tv/oauth2/validate',{
             headers:{'Authorization': 'OAuth '+access_token}
             })
             .then((result) => 
               { 
+                this.props.updateUser(result.user_id);
                 console.log('token validated')
                 this._handleUserdata(access_token);
               }
@@ -110,7 +116,7 @@ class StreamerListScreen extends Component {
       "display_name": this.state.userTwitchData["display_name"],
     }     
       this.isStreamLive();
-      this.setState({userData: data});
+      this.setState({userData: data,isLoading:false, refreshing: false});
       this.props.loadTwitchData(this.state.userData,this.state.streamer);
   }
   isStreamLive = () =>{
@@ -141,38 +147,41 @@ class StreamerListScreen extends Component {
           width:'100%',
           }}
           onPress={()=>{
-            AsyncStorage.removeItem('currentUserID');
-            navigation.navigate('AuthLoading')}} 
-          ><Text style={{
-            fontFamily:'noto',
-            fontSize:14,
-            color:'#fff',
-          }}> LOGOUT </Text></TouchableOpacity>,
-        headerStyle:{
-          backgroundColor:'#645393',
-         },
-         headerLeftContainerStyle:{
-          paddingLeft:10,
-         },
-        headerRightContainerStyle:{
-          paddingRight:10,
-        },
-        headerBackTitle:null,
+              AsyncStorage.removeItem('currentUserID');
+              navigation.navigate('AuthLoading')}} 
+            ><Text style={{
+              fontFamily:'noto',
+              fontSize:14,
+              color:'#fff',
+            }}> LOGOUT </Text></TouchableOpacity>
       }
+        
+         
   };
 
   render() {
-    return (
-        <View style={styles.container}>
-          <Header title="Following Streamers"/>
-          <StreamerFeed navigation={this.props.navigation}/>
+    if(this.state.isLoading){
+      return(
+        <View>
+            <Loading />
         </View>
-    )
+      )
+    }
+    else{
+      return (
+        <View contentContainerStyle={{flex: 1}}>
+          <ScrollView style={styles.container} refreshControl = {
+            <RefreshControl refreshing={this.state.refreshing} onRefresh={this._refreshData} title='FETCHING STREAMERS' tintColor='#645393'titleColor="#999"/>}>
+            <Header title="Following Streamers"/>
+            <StreamerFeed navigation={this.props.navigation}/>
+          </ScrollView>
+        </View>
+      )
+    }
   }
 }
 const styles = StyleSheet.create({
   container:{
-    flex:1,
     alignContent: 'center',
   },
   
@@ -186,6 +195,7 @@ const mapStateToProps = (state) =>  {
 const mapDispatchToProps = (dispatch) =>{
   return{
     loadTwitchData: (userData,followingStreamersData) => dispatch(loadTwitchData(userData,followingStreamersData)),
+    updateUser: (uid) => dispatch(updateUser(uid))
   }
 }
 export default compose(

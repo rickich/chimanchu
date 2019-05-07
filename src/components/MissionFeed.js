@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { TouchableOpacity, StyleSheet, ScrollView,Text,View } from 'react-native'
+import { StyleSheet, ScrollView,Text,View } from 'react-native'
 import MissionCard from '../components/MissionCard'
 import {connect} from 'react-redux'
 import {firestoreConnect} from 'react-redux-firebase'
@@ -20,7 +20,7 @@ class MissionFeed extends Component {
             }
         });
         if(isEmpty){
-            return <Text style={styles.noMission}>Streamer has mission given. You can submit a mission by clicking button below!</Text>
+            return <Text style={styles.noMission}>Streamer has no mission given. You can submit a mission by clicking button below!</Text>
         }
         else{
             return this.props.missions.map(_mission => {

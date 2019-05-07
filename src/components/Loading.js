@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Image,Text, View, StyleSheet } from 'react-native'
+import { Image, View, StyleSheet } from 'react-native'
 import Header from './Header'
 export default class Loading extends Component {
   render() {

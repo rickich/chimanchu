@@ -6,17 +6,11 @@ import {connect} from 'react-redux'
 import {compose} from 'redux'
 import {firestoreConnect} from 'react-redux-firebase'
 
-
 class AddToMissionScreen extends Component {
   static navigationOptions = ({navigation})=> {
       
     return{
     title: 'Missions',
-    headerBackTitle:null,
-    headerTintColor: '#fff',
-    headerStyle:{
-      backgroundColor:'#645393',
-     },
     headerRight: <TouchableOpacity style={{
     width:'100%',
     }}
@@ -26,9 +20,6 @@ class AddToMissionScreen extends Component {
       fontSize:14,
       color:'#fff',
     }}>LOGOUT</Text></TouchableOpacity>,
-    headerRightContainerStyle:{
-        paddingRight:10,
-    },
     }
 };
   streamer = this.props.navigation.getParam('streamer');
@@ -37,7 +28,7 @@ class AddToMissionScreen extends Component {
     from_id: this.props.user.id,
     to_id: streamer.id,
     mission_id: this.props.mission_id,
-    from_name: this.props.twitch_user_data.displayName
+    from_name: this.props.twitch_user_data.displayName,
   }
 
   render() {
@@ -48,17 +39,12 @@ class AddToMissionScreen extends Component {
         <Input labelStyle={styles.label} containerStyle={styles.inputContainer} inputContainerStyle={styles.title}editable={false} label='Amount' keyboardType = 'numeric' value={this.props.mission.amount}/>
         <Input labelStyle={styles.label} containerStyle={styles.inputContainer} inputContainerStyle={styles.title}label='Adding Amount' keyboardType = 'numeric' onChangeText={(text) => this.setState({amount: text})}/>
         <TouchableOpacity style = {styles.button} title='Submit Mission'  onPress={() =>{
-          this.props.createAddToMission(this.state); 
+          sum = parseInt(this.props.mission.total_amount)+parseInt(this.state.amount)
+          this.props.createAddToMission(this.state,sum); 
           this.props.navigation.navigate('MissionDetail',{'mission':this.props.mission})
           }}><Text style={styles.button_txt}>Add To this Mission</Text></TouchableOpacity>
       </View>
     )
-  }
-  handlePost= () =>{
-    
-    console.log('handleing post of >>>>'+JSON.stringify(this.props.navigation.getParam('streamer')))
-    console.log('mission data: '+JSON.stringify(this.state.from_name))
-    //this.props.createMission(this.state)
   }
 }
 
@@ -127,15 +113,15 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = (dispatch) =>{
   return{
-    createAddToMission: (mission) => dispatch(createAddToMission(mission))
+    createAddToMission: (mission,sum) => dispatch(createAddToMission(mission,sum))
   }
 }
 const mapStateToProps = (state,ownProps) =>  {
   const id = ownProps.navigation.state.params.mission_id;
   const missions = state.firestore.data.missions;
   const ownMission = missions ? missions[id] : null; 
-   console.log(missions);
-   console.log(ownProps)
+  //  console.log(missions);
+  //  console.log(ownProps)
 
   return{
     mission: ownMission,

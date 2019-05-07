@@ -12,10 +12,6 @@ class MissionDetailScreen extends Component {
     return{
     title: 'Mission Detail',
     headerBackTitle:null,
-    headerTintColor: '#fff',
-    headerStyle:{
-      backgroundColor:'#645393',
-     },
     headerRight: <TouchableOpacity style={{
     width:'100%',
     }}
@@ -25,9 +21,6 @@ class MissionDetailScreen extends Component {
       fontSize:14,
       color:'#fff',
     }}>LOGOUT</Text></TouchableOpacity>,
-    headerRightContainerStyle:{
-        paddingRight:10,
-    },
     }
 };
   
