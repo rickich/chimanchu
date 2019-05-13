@@ -61,7 +61,8 @@ const styles= StyleSheet.create({
 const mapStateToProps = (state) =>  {
     //console.log('loading state of'+JSON.stringify(state.twitch))
     return{
-        streamers: state.twitch.followingStreamers
+        streamers: state.twitch.followingStreamers,
+        twitchData: state.twitch
     }
 }
 

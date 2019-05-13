@@ -8,7 +8,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 
 
-class MissionDetailScreen extends Component {
+class MyCompleteMissionDetailScreen extends Component {
   static navigationOptions = ({navigation})=> {
     return{
     title: 'Mission Detail',
@@ -24,7 +24,6 @@ class MissionDetailScreen extends Component {
   
 
   displayAdded = () =>{
-    console.log('MISSIONS: '+JSON.stringify(this.props.addedMissions))
     if(this.props.addedMissions!=null){
       let missions = this.props.addedMissions
       return missions.map(_mission => {
@@ -54,16 +53,15 @@ class MissionDetailScreen extends Component {
 }
   render() {
     if(this.props.mission != undefined){
-      console.log('NAVIGATION'+JSON.stringify(this.props.navigation))
     return (
-      <View>
+      <View style={styles.container}>
          {/* <Image
             style={styles.thumbnail}
-            source={{uri: streamer["profile_image_url"]}} /> */}
-            
+            source={{uri: streamer["profile_image_url"]}} /> */}    
+        <View style={styles.title_container}>
         <Text style={styles.label}>Mission Title</Text>
         <View style={styles.title}>
-        <Text style={styles.title_text}> {this.props.mission.title}</Text>
+        <Text style={styles.title_text}> {this.props.mission.title}</Text></View>
         </View>
         <Text style={styles.label}>Mission Detail</Text>
         <View style={styles.detail_container}>
@@ -79,7 +77,7 @@ class MissionDetailScreen extends Component {
         </View>
         <View style={styles.divide}></View>
        
-        <ScrollView>
+        <ScrollView style = {styles.added_container}>
            <View  style={styles.donorTitle}>
             <Text>{this.props.mission.from_name}</Text>
             <Text>{this.props.mission.amount}</Text>
@@ -90,11 +88,10 @@ class MissionDetailScreen extends Component {
         <View style={styles.totalSection}>
           <Text>TOTAL: {this.props.mission.total_amount}</Text>
         </View>
-        <TouchableOpacity 
-            onPress={()=>
-                {
-                this.props.navigation.navigate('AddToMission',{'mission':this.props.mission, 'mission_id':this.props.mission_id,'headerString': "Add to a mission"})}}
-            style={styles.button}><Text style={styles.button_txt}>Add Bits</Text></TouchableOpacity>
+        <View style={{flexDirection:'row', flex:0.8}}>
+          <Text style={styles.comp}> COMPLETED </Text>
+        </View>
+        
       </View>
     )
   }
@@ -107,6 +104,13 @@ class MissionDetailScreen extends Component {
 }
 
 const styles = StyleSheet.create({
+  container:{
+    flex:1,
+    justifyContent:'center'
+  },
+  title_container:{
+    flex:1,
+  },
   totalSection:{
     marginTop:3,
     marginHorizontal:'7%',
@@ -148,20 +152,20 @@ divideLast :{
   marginHorizontal:'5%',
 },
   label:{
-    marginTop:40,
+    marginTop:20,
     marginLeft:'7%',
     marginBottom:2,
     fontFamily: 'noto',
     color:'#645393',
   },
   title:{
+    height:50,
     marginHorizontal:'4%',
     width:'90%',
     borderColor:'#645393',
     borderWidth:1.5,
     justifyContent:'center',
     borderRadius:5,
-    height:50,
   },
   title_text:{
     fontFamily: 'nunito-semibold',
@@ -172,13 +176,13 @@ divideLast :{
       color:'#645393', 
   },
   detail_container:{
+    flex:1.6,
     marginHorizontal:'4%',
     width:'90%',
     borderColor:'#645393',
     borderWidth:1.5,
     justifyContent:'flex-start',
     borderRadius:5,
-    height:120,
   },
     detail:{
       fontFamily: 'nunito-semibold',
@@ -189,25 +193,21 @@ divideLast :{
       textAlign:'left',
       color:'#645393', 
     },
-    button:{
-      margin:'5%',
-      backgroundColor:'#645393',
-      borderRadius:10,
-      height:40,
-      justifyContent:'center',
-
-  },
-  button_txt:{
-    fontFamily: 'nunito-semibold',
-    color:'#fff',
+    added_container:{
+      flex:1
+    },
+  comp:{
+    flex:1,
+    color:'#CC4553',
     alignSelf:'center',
+    paddingTop:14,
     textAlign:'center',
-    paddingTop:10
+    marginHorizontal:'auto',
+    fontSize:22,
   },
 })
 
 const mapStateToProps = (state,ownProps) =>  {
-  console.log('from fireStore in detail'+JSON.stringify(state.firestore.data));
   const id = ownProps.navigation.state.params.mission_id;
   const missions = state.firestore.data.missions;
   const ownMission = missions ? missions[id] : null; 
@@ -228,4 +228,4 @@ export default compose(
           collection: 'added_to_mission',
       }
   ])
-)(MissionDetailScreen)
+)(MyCompleteMissionDetailScreen)

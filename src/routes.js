@@ -6,6 +6,10 @@ import CreateMissionScreen from './screens/CreateMissionScreen';
 import MissionDetailScreen from './screens/MissionDetailScreen';
 import AddToMissionScreen from './screens/AddToMissionScreen';
 import AuthLoadingScreen from './screens/AuthLoadingScreen';
+import MyProfileScreen from './screens/MyProfileScreen';
+import MyMissionDetailScreen from './screens/MyMissionDetailScreen';
+import MyCurrentMissionDetailScreen from './screens/MyCurrentMissionDetailScreen';
+import MyCompleteMissionDetailScreen from './screens/MyCompleteMissionDetailScreen';
 
 const AppStackNavigator = createStackNavigator({
     StreamerList:{
@@ -23,7 +27,18 @@ const AppStackNavigator = createStackNavigator({
     AddToMission:{
         screen: AddToMissionScreen,
     },
-
+    MyProfile:{
+        screen: MyProfileScreen,
+    },
+    MyMissionDetail:{
+        screen: MyMissionDetailScreen,
+    },
+    MyCurrentMissionDetail:{
+        screen: MyCurrentMissionDetailScreen,
+    },
+    MyCompleteMissionDetail:{
+        screen: MyCompleteMissionDetailScreen,
+    }
   },
   {
     defaultNavigationOptions:{

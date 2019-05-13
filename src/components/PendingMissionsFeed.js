@@ -1,32 +1,31 @@
 import React, { Component } from 'react'
 import { TouchableOpacity, StyleSheet, ScrollView,Text,View } from 'react-native'
-import MissionCard from '../components/MissionCard'
+import MyMissionCard from './MyMissionCard'
 import {connect} from 'react-redux'
 import {firestoreConnect} from 'react-redux-firebase'
 import {compose} from 'redux'
 
-class MissionFeed extends Component {
+class PendingMissionsFeed extends Component {
     
     displayAllMissions = () =>{
-        const streamer = this.props.navigation.getParam('streamer');
-        const streamerID = streamer.id
+        const missions = this.props.ownMissions
         let isEmpty = true
-        console.log(this.props.missions)
-        this.props.missions.map(_mission => {
-            if(_mission.to_id == streamerID){
+
+        missions.map(_mission => {
+            if(_mission.status == 'pending'){
                 console.log('not empty')
                 isEmpty = false;
                 return;
             }
         });
         if(isEmpty){
-            return <Text style={styles.noMission}>Streamer has no mission given. You can submit a mission by clicking button below!</Text>
+            return <Text style={styles.noMission}>You have no missions received!</Text>
         }
         else{
-            return this.props.missions.map(_mission => {
-                if(_mission.to_id==streamerID){
+            return missions.map(_mission => {
+                if(_mission.status == 'pending'){
                     return(
-                    <MissionCard key={_mission.id} mission = {_mission} navigation={this.props.navigation}/>
+                    <MyMissionCard key={_mission.id} mission = {_mission} navigation={this.props.navigation}/>
                     );
                 }
             })
@@ -34,13 +33,11 @@ class MissionFeed extends Component {
     }
 
     render() {
-        //console.log(this.props.missions)
-        if(this.props.missions == undefined){
-            return(<View>
-                <Text>loading</Text>
-            </View>)
+        console.log(this.props.ownMissions)
+        if(this.props.ownMissions == undefined){
+            return(<Text style={styles.noMission}>loading</Text>)
         }
-        else if(this.props.missions!= undefined){
+        else if(this.props.ownMissions!= undefined){
             return (
                 <ScrollView>
                     <View style={styles.divide}></View>
@@ -48,10 +45,6 @@ class MissionFeed extends Component {
                 </ScrollView>
             )
         }
-        // if (this.state.missionEmpty){
-        //     console.log('nomission')
-        //     return <Text style={styles.noMission}>Streamer has mission given. You can submit a mission by clicking button below!</Text>
-        // }
     }
 }
 
@@ -72,10 +65,13 @@ const styles= StyleSheet.create({
 })
 
 const mapStateToProps = (state) =>  {
-    console.log('from fireStore'+JSON.stringify(state.firestore.ordered.missions));
-
+    const id = state.twitch.id
+    const missions = state.firestore.ordered.missions;
+    const ownMissions = missions ? missions.filter(_mission => {
+        return _mission.to_id === id
+    }) : null
     return{
-        missions: state.firestore.ordered.missions 
+        ownMissions: ownMissions,
     }
 }
 
@@ -86,4 +82,4 @@ export default compose(
             collection: 'missions'
         }
     ])
-)(MissionFeed)
+)(PendingMissionsFeed)

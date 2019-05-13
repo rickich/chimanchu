@@ -1,30 +1,30 @@
 import React, { Component } from 'react'
 import { TouchableOpacity, StyleSheet, ScrollView,Text,View } from 'react-native'
-import MissionCard from '../components/MissionCard'
+import MissionCard from './MissionCard'
 import {connect} from 'react-redux'
 import {firestoreConnect} from 'react-redux-firebase'
 import {compose} from 'redux'
 
-class MissionFeed extends Component {
+class MyMissionFeed extends Component {
     
     displayAllMissions = () =>{
-        const streamer = this.props.navigation.getParam('streamer');
-        const streamerID = streamer.id
+        const missions = this.props.missions
+        const myID = this.props.userID
         let isEmpty = true
         console.log(this.props.missions)
-        this.props.missions.map(_mission => {
-            if(_mission.to_id == streamerID){
+        missions.map(_mission => {
+            if(_mission.from_id == myID){
                 console.log('not empty')
                 isEmpty = false;
                 return;
             }
         });
         if(isEmpty){
-            return <Text style={styles.noMission}>Streamer has no mission given. You can submit a mission by clicking button below!</Text>
+            return <Text style={styles.noMission}>You have no missions given to streamers yet! </Text>
         }
         else{
-            return this.props.missions.map(_mission => {
-                if(_mission.to_id==streamerID){
+            return missions.map(_mission => {
+                if(_mission.from_id==myID){
                     return(
                     <MissionCard key={_mission.id} mission = {_mission} navigation={this.props.navigation}/>
                     );
@@ -48,10 +48,6 @@ class MissionFeed extends Component {
                 </ScrollView>
             )
         }
-        // if (this.state.missionEmpty){
-        //     console.log('nomission')
-        //     return <Text style={styles.noMission}>Streamer has mission given. You can submit a mission by clicking button below!</Text>
-        // }
     }
 }
 
@@ -75,7 +71,8 @@ const mapStateToProps = (state) =>  {
     console.log('from fireStore'+JSON.stringify(state.firestore.ordered.missions));
 
     return{
-        missions: state.firestore.ordered.missions 
+        missions: state.firestore.ordered.missions,
+        userID: state.twitch.id,
     }
 }
 
@@ -86,4 +83,4 @@ export default compose(
             collection: 'missions'
         }
     ])
-)(MissionFeed)
+)(MyMissionFeed)

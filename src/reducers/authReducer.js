@@ -9,7 +9,7 @@ const authReducer = (state = initState, action) =>{
                 ...state,
                 id: action.id
             };
-        case 'CREATE_USER':
+        case 'UPDATE_USER':
             return {
                 ...state,
                 id: action.id

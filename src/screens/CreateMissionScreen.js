@@ -3,6 +3,7 @@ import { Text,TouchableOpacity, StyleSheet, View } from 'react-native'
 import { Input } from 'react-native-elements'
 import { createMission } from '../actions/missionActions'
 import {connect} from 'react-redux'
+import FontAwesome from '@expo/vector-icons/FontAwesome'
 
 
 class CreateMissionScreen extends Component {
@@ -11,14 +12,11 @@ class CreateMissionScreen extends Component {
     return{
     title: 'Missions',
     headerRight: <TouchableOpacity style={{
-    width:'100%',
-    }}
-    onPress={()=>navigation.navigate('Login')} 
-    ><Text style={{
-      fontFamily:'noto',
-      fontSize:14,
-      color:'#fff',
-    }}>LOGOUT</Text></TouchableOpacity>,
+      width:'100%',
+      }}
+      onPress={()=>{
+          navigation.navigate('MyProfile')}} 
+        ><FontAwesome name="user-circle" size={20} color="white" style={{paddingRight: 10,}}/></TouchableOpacity>
     }
 };
   streamer = this.props.navigation.getParam('streamer');
@@ -28,7 +26,7 @@ class CreateMissionScreen extends Component {
     detail: '',
     amount: '',
     total_amount:'',
-    from_id: this.props.user.id,
+    from_id: this.props.twitch_user_data.id,
     to_id: streamer.id,
     status: 'pending',
     from_name: this.props.twitch_user_data.displayName

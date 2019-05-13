@@ -5,6 +5,8 @@ import { createAddToMission } from '../actions/missionActions'
 import {connect} from 'react-redux'
 import {compose} from 'redux'
 import {firestoreConnect} from 'react-redux-firebase'
+import FontAwesome from '@expo/vector-icons/FontAwesome'
+
 
 class AddToMissionScreen extends Component {
   static navigationOptions = ({navigation})=> {
@@ -12,20 +14,17 @@ class AddToMissionScreen extends Component {
     return{
     title: 'Missions',
     headerRight: <TouchableOpacity style={{
-    width:'100%',
-    }}
-    onPress={()=>navigation.navigate('Login')} 
-    ><Text style={{
-      fontFamily:'noto',
-      fontSize:14,
-      color:'#fff',
-    }}>LOGOUT</Text></TouchableOpacity>,
+      width:'100%',
+      }}
+      onPress={()=>{
+          navigation.navigate('MyProfile')}} 
+        ><FontAwesome name="user-circle" size={20} color="white" style={{paddingRight: 10,}}/></TouchableOpacity>
     }
 };
   streamer = this.props.navigation.getParam('streamer');
   state ={
     amount: '',
-    from_id: this.props.user.id,
+    from_id: this.props.twitch_user_data.id,
     to_id: streamer.id,
     mission_id: this.props.mission_id,
     from_name: this.props.twitch_user_data.displayName,
@@ -101,13 +100,14 @@ const styles = StyleSheet.create({
       margin:'5%',
       backgroundColor:'#645393',
       borderRadius:10,
-      height:50,
+      height:40,
   },
   button_txt:{
     fontFamily: 'nunito-semibold',
     color:'#fff',
     textAlign:'center',
-    alignSelf:'center'
+    alignSelf:'center',
+    paddingTop:11
   },
 })
 

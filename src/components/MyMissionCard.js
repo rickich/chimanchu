@@ -2,7 +2,7 @@ import React from 'react'
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native'
 
 
-export default class MissionCard extends React.Component{
+export default class MyMissionCard extends React.Component{
     render(){
         const mission = this.props.mission;
         return (
@@ -10,7 +10,17 @@ export default class MissionCard extends React.Component{
             <TouchableOpacity 
             onPress={()=>
                 {
-                this.props.navigation.navigate('MissionDetail',{'mission':mission,'mission_id':mission.id})}}
+                  if(mission.status == 'pending'){
+                this.props.navigation.navigate('MyMissionDetail',{'mission':mission,'mission_id':mission.id})}
+                else if (mission.status == 'current'){
+                  this.props.navigation.navigate('MyCurrentMissionDetail',{'mission':mission,'mission_id':mission.id})}
+                else if (mission.status == 'complete'){
+                  this.props.navigation.navigate('MyCompleteMissionDetail',{'mission':mission,'mission_id':mission.id})}
+                }
+              }
+          
+              
+
             style={styles.button}>
 
             <Text style={styles.title}>{mission.title}</Text>

@@ -7,27 +7,16 @@ import FontAwesome from '@expo/vector-icons/FontAwesome'
 export default class MissionScreen extends Component {
 
     static navigationOptions = ({navigation})=> {
-      
         return{
         title: null,
         headerBackTitle:null,
         headerRight: <TouchableOpacity style={{
-        width:'100%',
-        }}
-        onPress={()=>navigation.navigate('Login')} 
-        ><Text style={{
-          fontFamily:'noto',
-          fontSize:14,
-          color:'#fff',
-        }}>LOGOUT </Text></TouchableOpacity>,
+          width:'100%',
+          }}
+          onPress={()=>{
+              navigation.navigate('MyProfile')}} 
+            ><FontAwesome name="user-circle" size={20} color="white" style={{paddingRight: 10,}}/></TouchableOpacity>
         }
-    };
-    state = {
-      index: 0,
-      routes: [
-        { key: 'first', title: 'First' },
-        { key: 'second', title: 'Second' },
-      ],
     };
     render() {
       streamer=this.props.navigation.getParam('streamer');
@@ -45,7 +34,7 @@ export default class MissionScreen extends Component {
         </View>
         <View style= {styles.missionFeed}>
         <Header title="Missions" style={{width:'100%',alignContent:'center', }}/>
-        <MissionFeed navigation={this.props.navigation}/>
+        <MissionFeed streamer = {streamer} navigation={this.props.navigation}/>
         </View>
           <TouchableOpacity style={styles.button} onPress = {()=>{ this.props.navigation.navigate('CreateMission',{'streamer':this.props.navigation.getParam('streamer')})}}>
                   <Text style={styles.button_txt}>Send New Mission</Text>

@@ -18,6 +18,10 @@ const missionReducer = (state = initState, action) =>{
             return state;
         case 'ADDED_TO_MISSION':
             return state;
+        case 'UPDATE_STATUS':
+        return state;
+        case 'DELETE_MISSION':
+        return state;
         default:
             return state;
     }

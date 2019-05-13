@@ -2,22 +2,28 @@ import React, { Component } from 'react'
 import { View , StyleSheet, Text, TouchableOpacity, AsyncStorage, ScrollView, RefreshControl} from 'react-native'
 import Header from '../components/Header'
 import StreamerFeed from '../components/StreamerFeed'
-import {updateUser} from '../actions/authActions'
+import {updateUser,setUser} from '../actions/authActions'
 import {loadTwitchData} from '../actions/twitchActions'
 import {connect} from 'react-redux'
 import {firestoreConnect} from 'react-redux-firebase'
 import {compose} from 'redux'
 import axios from 'axios';
 import Loading from '../components/Loading'
+import FontAwesome from '@expo/vector-icons/FontAwesome'
+
 
 const TWITCH_APP_ID = 'vfno0i2im9fshlfil4hsyiq6esfnex'; 
 const TWITCH_SECRET = 'w8eaix5nyl36bjrmbwtzdxjv7g6861';
 const currentUserID = AsyncStorage.getItem('currentUserID');
+let data = {
+  "profile_url": '',
+  "display_name": '',
+}     
 
 class StreamerListScreen extends Component {
   constructor (props){
     super(props);
-    this.state = {isLoading:true,user:'',refreshing:false,}
+    this.state = {isLoading:true,user:'',refreshing:false}
     this._bootstrapAsync();
   }
   _bootstrapAsync = async () => {
@@ -60,6 +66,7 @@ class StreamerListScreen extends Component {
     .then((response)=>{
       AsyncStorage.setItem('access_token', response.data.access_token)
       AsyncStorage.setItem('refresh_token', response.data.refresh_token)
+      console.log('successfully got new token')
       this.props.setUser(currentUserID, response.data);
     })
     .catch(function (error){
@@ -114,6 +121,7 @@ class StreamerListScreen extends Component {
     data = {
       "profile_url": this.state.userTwitchData["profile_image_url"],
       "display_name": this.state.userTwitchData["display_name"],
+      'id' : this.state.userTwitchData['id']
     }     
       this.isStreamLive();
       this.setState({userData: data,isLoading:false, refreshing: false});
@@ -133,7 +141,7 @@ class StreamerListScreen extends Component {
       }
      }    
   }
-
+  
 
 
   static navigationOptions = ({ navigation }) => {
@@ -147,13 +155,8 @@ class StreamerListScreen extends Component {
           width:'100%',
           }}
           onPress={()=>{
-              AsyncStorage.removeItem('currentUserID');
-              navigation.navigate('AuthLoading')}} 
-            ><Text style={{
-              fontFamily:'noto',
-              fontSize:14,
-              color:'#fff',
-            }}> LOGOUT </Text></TouchableOpacity>
+              navigation.navigate('MyProfile')}} 
+            ><FontAwesome name="user-circle" size={20} color="white" style={{paddingRight: 10,}}/></TouchableOpacity>
       }
         
          
@@ -195,7 +198,8 @@ const mapStateToProps = (state) =>  {
 const mapDispatchToProps = (dispatch) =>{
   return{
     loadTwitchData: (userData,followingStreamersData) => dispatch(loadTwitchData(userData,followingStreamersData)),
-    updateUser: (uid) => dispatch(updateUser(uid))
+    updateUser: (uid) => dispatch(updateUser(uid)),
+    setUser: (currentUserID, token) =>dispatch(setUser(currentUserID, token))
   }
 }
 export default compose(
