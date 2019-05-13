@@ -2,7 +2,7 @@
 export const createMission = (mission) => {
     return (dispatch, getState, { getFirebase,getFirestore }) => {
         // make async call to database
-        // const firestore = getFirestore();
+        const firestore = getFirestore();
         // firestore.collection('users').runTransaction(function(transaction) {
         //     return transaction.get(mission.from_id).then(function(doc) {
         //         if (!doc.exists) {
