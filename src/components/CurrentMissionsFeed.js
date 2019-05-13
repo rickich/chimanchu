@@ -13,7 +13,6 @@ class CurrentMissionsFeed extends Component {
 
         missions.map(_mission => {
             if(_mission.status == 'current'){
-                console.log('not empty'+JSON.stringify(_mission))
                 isEmpty = false;
                 return;
             }
@@ -33,7 +32,6 @@ class CurrentMissionsFeed extends Component {
     }
 
     render() {
-        console.log(this.props.ownMissions)
         if(this.props.ownMissions == undefined){
             return(<Text style={styles.noMission}>loading</Text>)
         }

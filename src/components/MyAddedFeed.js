@@ -59,7 +59,7 @@ const styles= StyleSheet.create({
     },
     noMission:{
         fontFamily: 'nunito-semibold',
-        paddingLeft: '5%',
+        padding: '5%',
         fontSize: 18,
         alignSelf:'center',
         textAlign:'left',

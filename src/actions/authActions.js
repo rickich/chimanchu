@@ -1,3 +1,4 @@
+
 export const setUser = (id,token) => {
     return (dispatch, getState, { getFirebase,getFirestore }) => {
         // make async call to database
@@ -15,6 +16,7 @@ export const setUser = (id,token) => {
 };
 
 export const updateUser = (id,token) =>{
+    console.log('updating User')
     return (dispatch, getState, { getFirebase,getFirestore }) => {
         // make async call to database
         const firestore = getFirestore();
@@ -26,5 +28,11 @@ export const updateUser = (id,token) =>{
         }).catch((err) => {
             dispatch({type: 'ERROR', err });
         })
+    }
+}
+export const updateUserID = (id) =>{
+    console.log('updating User'+id)
+    return (dispatch) => {
+        dispatch({type: 'UPDATE_USER', id });
     }
 }

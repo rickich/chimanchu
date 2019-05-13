@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { View , StyleSheet, Text, TouchableOpacity, AsyncStorage, ScrollView, RefreshControl} from 'react-native'
 import Header from '../components/Header'
 import StreamerFeed from '../components/StreamerFeed'
-import {updateUser} from '../actions/authActions'
+import {updateUser,updateUserID} from '../actions/authActions'
 import {loadTwitchData} from '../actions/twitchActions'
 import {connect} from 'react-redux'
 import {firestoreConnect} from 'react-redux-firebase'
@@ -53,11 +53,12 @@ class StreamerListScreen extends Component {
             .catch(()=>
             {
               console.log('token invalid, refreshing token')
-              this._refreshToken(refresh_token)
+              this._refreshToken(refresh_token,currentUserID)
             });
   }
 
-  _refreshToken = async (refresh_token) =>{
+  _refreshToken = async (refresh_token,currentUserID) =>{
+    console.log(currentUserID)
     let result = await axios.post('https://id.twitch.tv/oauth2/token'+
       '?client_id='+TWITCH_APP_ID+
       '&client_secret='+TWITCH_SECRET+
@@ -198,7 +199,9 @@ const mapStateToProps = (state) =>  {
 const mapDispatchToProps = (dispatch) =>{
   return{
     loadTwitchData: (userData,followingStreamersData) => dispatch(loadTwitchData(userData,followingStreamersData)),
-    updateUser: (currentUserID, token) =>dispatch(updateUser(currentUserID, token))
+    updateUser: (currentUserID, token) =>dispatch(updateUser(currentUserID, token)),
+    updateUserID: (currentUserID) =>dispatch(updateUserID(currentUserID))
+
   }
 }
 export default compose(

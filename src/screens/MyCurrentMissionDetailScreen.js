@@ -30,6 +30,7 @@ class MyCurrentMissionDetailScreen extends Component {
       return missions.map(_mission => {
         // console.log(_mission['mission_id'])
         // console.log(this.props.mission_id)
+        
         if(_mission.mission_id == this.props.mission_id){
           return(
             <View key={_mission.id} style={styles.donorTitle}>
@@ -100,7 +101,7 @@ class MyCurrentMissionDetailScreen extends Component {
           <TouchableOpacity 
             onPress={()=>
                 {
-                  this.props.completeMissionStatus(this.props.mission_id);
+                  this.props.completeMissionStatus(this.props.mission_id,this.props.mission);
                 this.props.navigation.navigate('MyProfile')}}
             style={styles.button}><Text style={styles.button_txt}>Complete</Text></TouchableOpacity>
         </View>
@@ -235,7 +236,7 @@ divideLast :{
 const mapDispatchToProps = (dispatch) =>{
   return{
     discardMission: (mID) => dispatch(discardMission(mID)),
-    completeMissionStatus: (mID) => dispatch(completeMissionStatus(mID))
+    completeMissionStatus: (mID,mission) => dispatch(completeMissionStatus(mID,mission))
   }
 }
 

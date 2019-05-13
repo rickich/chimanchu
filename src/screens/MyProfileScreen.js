@@ -21,22 +21,9 @@ class MyProfileScreen extends Component {
       user:{}
     }
     this.updateIndex = this.updateIndex.bind(this)
-    this._bootstrapAsync();
 
   }
-  _bootstrapAsync = async () => {
-    const uid = await AsyncStorage.getItem('currentUserID');
-    console.log('uid=='+this.props.users)
-    if(this.props.users!=undefined){
-       this.props.users.map(_user => {
-        console.log('not empty'+JSON.stringify(_user))
-        if(_user.id == uid){
-            this.setState({user:_user})
-            return;
-        }
-      });
-    }
-  }
+
   updateIndex (selectedIndex) {
     this.setState({selectedIndex})
   }
@@ -104,7 +91,7 @@ class MyProfileScreen extends Component {
         </View>
         <TouchableOpacity style={{flex:1.2,flexDirection:'row',borderColor:'#645393',borderWidth:1, borderRadius:10, justifyContent:'center',alignItems:'center', margin:'5%',paddingTop:15}} onPress={()=>{Alert.alert('To be updated!')}}>
           <FontAwesome name="diamond" size={16} color="#645393" style={{alignSelf:'baseline'}}/>
-          <Text style={{fontSize:16,color:'#645393',marginLeft:'2%'}}>{this.state.user.daya}</Text>
+          <Text style={{fontSize:16,color:'#645393',marginLeft:'2%'}}>{this.props.user.daya}</Text>
         </TouchableOpacity>
       </View>
     )
@@ -196,10 +183,13 @@ button_txt:{
 
   const mapStateToProps = (state) =>  {
     const missions = state.firestore.ordered.missions;
-    const users = state.firestore.ordered.users ? state.firestore.ordered.users: null;
+    const users = state.firestore.data.users ? state.firestore.data.users: null;
+    const id = state.auth.id
+    const user = users ? users[id] : null;
+    console.log(users)
     return{
       missions: missions,
-      users: users,
+      user: user,
       twitch_user_data:state.twitch
     }
   }

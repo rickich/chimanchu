@@ -1,4 +1,3 @@
-
 const initState = {
         id:'id',
 }
@@ -10,6 +9,7 @@ const authReducer = (state = initState, action) =>{
                 id: action.id
             };
         case 'UPDATE_USER':
+        console.log('UPDATING USER'+JSON.stringify(action.id))
             return {
                 ...state,
                 id: action.id

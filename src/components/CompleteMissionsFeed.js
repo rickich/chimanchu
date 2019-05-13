@@ -19,7 +19,7 @@ class CompleteMissionsFeed extends Component {
             }
         });
         if(isEmpty){
-            return <Text style={styles.noMission}>You have no on-going mission!</Text>
+            return <Text style={styles.noMission}>You have no completed mission!</Text>
         }
         else{
             return missions.map(_mission => {
