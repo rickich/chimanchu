@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { AuthSession } from 'expo';
 import axios from 'axios';
 import Loading from '../components/Loading'
-import {setUser} from '../actions/authActions'
+import {setUser,updateUser} from '../actions/authActions'
 import {connect} from 'react-redux'
 import {firestoreConnect} from 'react-redux-firebase'
 import {compose} from 'redux'
@@ -107,7 +107,7 @@ class LoginScreen extends Component {
     }
     else{
       console.log('user exists!')
-      this.props.setUser(id,data['token']);
+      this.props.updateUser(id,data['token']);
       this.props.navigation.navigate('AuthLoading');
     }
   }
@@ -180,6 +180,8 @@ const mapStateToProps = (state) =>  {
 const mapDispatchToProps = (dispatch) =>{
   return{
     setUser: (userID,token) => dispatch(setUser(userID,token)),
+    updateUser: (userID,token) => dispatch(updateUser(userID,token)),
+
   }
 }
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { TouchableOpacity, Image, Text, View, StyleSheet, } from 'react-native'
+import { TouchableOpacity, Image, Text, View, StyleSheet,AsyncStorage,Alert } from 'react-native'
 import Header from '../components/Header'
 import MyMissionFeed from '../components/MyMissionFeed'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
@@ -17,9 +17,25 @@ class MyProfileScreen extends Component {
   constructor () {
     super()
     this.state = {
-      selectedIndex: 0
+      selectedIndex: 0,
+      user:{}
     }
     this.updateIndex = this.updateIndex.bind(this)
+    this._bootstrapAsync();
+
+  }
+  _bootstrapAsync = async () => {
+    const uid = await AsyncStorage.getItem('currentUserID');
+    console.log('uid=='+this.props.users)
+    if(this.props.users!=undefined){
+       this.props.users.map(_user => {
+        console.log('not empty'+JSON.stringify(_user))
+        if(_user.id == uid){
+            this.setState({user:_user})
+            return;
+        }
+      });
+    }
   }
   updateIndex (selectedIndex) {
     this.setState({selectedIndex})
@@ -49,7 +65,9 @@ class MyProfileScreen extends Component {
     headerRight: <TouchableOpacity style={{
     width:'100%',
     }}
-    onPress={()=>navigation.navigate('Login')} 
+    onPress={()=>
+      {AsyncStorage.clear()
+      navigation.navigate('Login')}} 
     ><Text style={{
       fontFamily:'noto',
       fontSize:14,
@@ -62,7 +80,6 @@ class MyProfileScreen extends Component {
     const buttons = ['Sent','Added','Pending','Current','Complete']
     const { selectedIndex } = this.state
     streamer=this.props.navigation.getParam('streamer');
-    console.log(this.state.selectedIndex)
     return (
       <View style={styles.container}>
         <View style={styles.profile}>
@@ -71,17 +88,24 @@ class MyProfileScreen extends Component {
             source={{uri: this.props.twitch_user_data.profile_image_url}} />
             {this.displayName(this.props.twitch_user_data.displayName)}
         </View>
-        
+        <Header title='My Missions' style={{width:'100%',alignContent:'center',margin:'5%' }}/>
         <ButtonGroup
       onPress={this.updateIndex}
       selectedIndex={selectedIndex}
       buttons={buttons}
-      containerStyle={{height: 100}} />
+      containerStyle={{flex:1,borderColor:'#645393'}} 
+      textStyle = {{fontFamily:'nunito-semibold',fontSize:14,color:'#645393'}}
+      selectedButtonStyle={{backgroundColor:'#645393'}}
+      containerBorderRadius={10}
+      />
 
         <View style= {styles.missionFeed}>
-        <Header title='My Missions' style={{width:'100%',alignContent:'center', }}/>
         {this.displaySelected()}
         </View>
+        <TouchableOpacity style={{flex:1.2,flexDirection:'row',borderColor:'#645393',borderWidth:1, borderRadius:10, justifyContent:'center',alignItems:'center', margin:'5%',paddingTop:15}} onPress={()=>{Alert.alert('To be updated!')}}>
+          <FontAwesome name="diamond" size={16} color="#645393" style={{alignSelf:'baseline'}}/>
+          <Text style={{fontSize:16,color:'#645393',marginLeft:'2%'}}>{this.state.user.daya}</Text>
+        </TouchableOpacity>
       </View>
     )
   }
@@ -120,6 +144,7 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     alignSelf:'flex-start',
     alignItems:'center',
+    justifyContent:'center',
     marginLeft:30,
     marginTop:20,
   },
@@ -131,6 +156,7 @@ const styles = StyleSheet.create({
   },
   missionFeed:{
     flex:9,
+    marginTop:'2%'
   },
   name:{
     fontFamily: 'nunito-semibold',
@@ -144,7 +170,7 @@ const styles = StyleSheet.create({
     fontFamily: 'hanna',
     paddingLeft: 10,
     fontSize: 22,
-    alignSelf:'flex-start',
+    alignSelf:'center',
     textAlign:'left',
     color:'#645393',
     fontWeight:'bold'
@@ -170,9 +196,10 @@ button_txt:{
 
   const mapStateToProps = (state) =>  {
     const missions = state.firestore.ordered.missions;
+    const users = state.firestore.ordered.users ? state.firestore.ordered.users: null;
     return{
       missions: missions,
-      userID: state.auth.id,
+      users: users,
       twitch_user_data:state.twitch
     }
   }
@@ -182,6 +209,7 @@ button_txt:{
     firestoreConnect([
         {
             collection: 'missions',
+            collection: 'users',
         }
     ])
   )(MyProfileScreen)

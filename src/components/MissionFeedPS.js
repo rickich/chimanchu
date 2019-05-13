@@ -5,7 +5,7 @@ import {connect} from 'react-redux'
 import {firestoreConnect} from 'react-redux-firebase'
 import {compose} from 'redux'
 
-class MissionFeed extends Component {
+class MissionFeedPS extends Component {
     
     displayAllMissions = () =>{
         const streamer = this.props.navigation.getParam('streamer');
@@ -13,18 +13,18 @@ class MissionFeed extends Component {
         let isEmpty = true
         console.log(this.props.missions)
         this.props.missions.map(_mission => {
-            if(_mission.to_id == streamerID && _mission.status=='current'){
+            if(_mission.to_id == streamerID &&_mission.status == 'pending'){
                 console.log('not empty')
                 isEmpty = false;
                 return;
             }
         });
         if(isEmpty){
-            return <Text style={styles.noMission}>Streamer has no on-going mission. You can submit a mission by clicking button below!</Text>
+            return <Text style={styles.noMission}>Streamer has no pending mission at this moment. You can submit a mission by clicking button below!</Text>
         }
         else{
             return this.props.missions.map(_mission => {
-                if(_mission.to_id==streamerID&& _mission.status=='current'){
+                if(_mission.to_id==streamerID&& _mission.status=='pending'){
                     return(
                     <MissionCard key={_mission.id} mission = {_mission} navigation={this.props.navigation}/>
                     );
@@ -86,4 +86,4 @@ export default compose(
             collection: 'missions'
         }
     ])
-)(MissionFeed)
+)(MissionFeedPS)

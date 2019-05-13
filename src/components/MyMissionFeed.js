@@ -13,7 +13,7 @@ class MyMissionFeed extends Component {
         let isEmpty = true
         console.log(this.props.missions)
         missions.map(_mission => {
-            if(_mission.from_id == myID){
+            if(_mission.from_id == myID && _mission.status!='complete'){
                 console.log('not empty')
                 isEmpty = false;
                 return;
@@ -24,7 +24,7 @@ class MyMissionFeed extends Component {
         }
         else{
             return missions.map(_mission => {
-                if(_mission.from_id==myID){
+                if(_mission.from_id==myID&& _mission.status!='complete'){
                     return(
                     <MissionCard key={_mission.id} mission = {_mission} navigation={this.props.navigation}/>
                     );
@@ -53,12 +53,13 @@ class MyMissionFeed extends Component {
 
 const styles= StyleSheet.create({
     divide :{
+        marginTop:5,
         borderBottomWidth:1.5,
-        borderBottomColor:'#645393'
+        borderBottomColor:'#D5C8FA'
     },
     noMission:{
         fontFamily: 'nunito-semibold',
-        paddingLeft: 10,
+        padding: '5%',
         fontSize: 18,
         alignSelf:'center',
         textAlign:'left',
@@ -68,8 +69,6 @@ const styles= StyleSheet.create({
 })
 
 const mapStateToProps = (state) =>  {
-    console.log('from fireStore'+JSON.stringify(state.firestore.ordered.missions));
-
     return{
         missions: state.firestore.ordered.missions,
         userID: state.twitch.id,

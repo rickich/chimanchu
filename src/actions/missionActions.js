@@ -2,7 +2,18 @@
 export const createMission = (mission) => {
     return (dispatch, getState, { getFirebase,getFirestore }) => {
         // make async call to database
-        const firestore = getFirestore();
+        // const firestore = getFirestore();
+        // firestore.collection('users').runTransaction(function(transaction) {
+        //     return transaction.get(mission.from_id).then(function(doc) {
+        //         if (!doc.exists) {
+        //             throw "Document does not exist!";
+        //         }
+        
+        //         var newDaya = doc.data().daya - mission.amount;
+        //         transaction.update(doc, { daya: newDaya });
+        //         return newDaya;
+        //     });
+        // })
         firestore.collection('missions').add({
             ...mission,
             createdAt: new Date(), 
@@ -12,11 +23,25 @@ export const createMission = (mission) => {
             dispatch({type: 'CREATE_MISSION_ERROR', err });
         })
     }
+        
 };
 export const createAddToMission = (mission,newTot) => {
     return (dispatch, getState, { getFirebase,getFirestore }) => {
         // make async call to database
         const firestore = getFirestore();
+
+        // firestore.collection('users').runTransaction((transaction) => {
+        //     return transaction.get(mission.from_id).then((doc) =>{
+        //         if (!doc.exists) {
+        //             throw "Document does not exist!";
+        //         }
+        
+        //         var newDaya = doc.data().daya - mission.amount;
+        //         transaction.update(doc, { daya: newDaya });
+        //         return newDaya;
+        //     });
+        // })
+
         console.log(mission.total_amount)
         firestore.collection('missions').doc(mission.mission_id).update({
             total_amount: newTot,
@@ -33,7 +58,7 @@ export const createAddToMission = (mission,newTot) => {
     }
 };
 
-export const updateMissionStatus = (mission,mID) => {
+export const updateMissionStatus = (mID) => {
     return (dispatch, getState, { getFirebase,getFirestore }) => {
         // make async call to database
         console.log(mID)

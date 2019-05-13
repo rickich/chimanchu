@@ -43,7 +43,6 @@ class CreateMissionScreen extends Component {
   }
   handlePost= () =>{
     this.setState({from_id: this.props.user.id,from_name:this.props.twitch_user_data.displayName})
-    console.log('handleing post of >>>>'+JSON.stringify(this.props.navigation.getParam('streamer')))
     console.log('mission data: '+JSON.stringify(this.state))
     this.props.createMission(this.state)
     this.props.navigation.navigate('MissionList')

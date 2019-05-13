@@ -50,12 +50,13 @@ class CurrentMissionsFeed extends Component {
 
 const styles= StyleSheet.create({
     divide :{
+        marginTop:5,
         borderBottomWidth:1.5,
-        borderBottomColor:'#645393'
+        borderBottomColor:'#D5C8FA'
     },
     noMission:{
         fontFamily: 'nunito-semibold',
-        paddingLeft: 10,
+        padding:'5%',
         fontSize: 18,
         alignSelf:'center',
         textAlign:'left',

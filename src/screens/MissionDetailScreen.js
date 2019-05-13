@@ -24,7 +24,6 @@ class MissionDetailScreen extends Component {
   
 
   displayAdded = () =>{
-    console.log('MISSIONS: '+JSON.stringify(this.props.addedMissions))
     if(this.props.addedMissions!=null){
       let missions = this.props.addedMissions
       return missions.map(_mission => {

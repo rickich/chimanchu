@@ -3,10 +3,32 @@ import { TouchableOpacity, Image, Text, View, StyleSheet, } from 'react-native'
 import Header from '../components/Header'
 import MissionFeed from '../components/MissionFeed'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
+import { ButtonGroup } from 'react-native-elements';
+import MissionFeedPS from '../components/MissionFeedPS'
+
 
 export default class MissionScreen extends Component {
+  constructor () {
+    super()
+    this.state = {
+      selectedIndex: 0,
+    }
+    this.updateIndex = this.updateIndex.bind(this)    
+  }
+  updateIndex (selectedIndex) {
+    this.setState({selectedIndex})
+  }
+  displaySelected = () =>{
+    if(this.state.selectedIndex==1){
+      return <MissionFeed navigation={this.props.navigation}/> 
+    }
+    else if(this.state.selectedIndex==0){
+      return <MissionFeedPS navigation={this.props.navigation}/> 
+    }
+  }
 
     static navigationOptions = ({navigation})=> {
+      
         return{
         title: null,
         headerBackTitle:null,
@@ -19,6 +41,8 @@ export default class MissionScreen extends Component {
         }
     };
     render() {
+      const buttons = ['Pending','Current']
+      const { selectedIndex } = this.state
       streamer=this.props.navigation.getParam('streamer');
       console.log(JSON.stringify(this.props.navigation))
     return (
@@ -34,7 +58,16 @@ export default class MissionScreen extends Component {
         </View>
         <View style= {styles.missionFeed}>
         <Header title="Missions" style={{width:'100%',alignContent:'center', }}/>
-        <MissionFeed streamer = {streamer} navigation={this.props.navigation}/>
+        <ButtonGroup
+      onPress={this.updateIndex}
+      selectedIndex={selectedIndex}
+      buttons={buttons}
+      containerStyle={{height:35,borderColor:'#645393'}} 
+      textStyle = {{fontFamily:'nunito-semibold',fontSize:14,color:'#645393'}}
+      selectedButtonStyle={{backgroundColor:'#645393'}}
+      containerBorderRadius={10}
+      />
+      {this.displaySelected()}
         </View>
           <TouchableOpacity style={styles.button} onPress = {()=>{ this.props.navigation.navigate('CreateMission',{'streamer':this.props.navigation.getParam('streamer')})}}>
                   <Text style={styles.button_txt}>Send New Mission</Text>

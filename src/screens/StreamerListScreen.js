@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { View , StyleSheet, Text, TouchableOpacity, AsyncStorage, ScrollView, RefreshControl} from 'react-native'
 import Header from '../components/Header'
 import StreamerFeed from '../components/StreamerFeed'
-import {updateUser,setUser} from '../actions/authActions'
+import {updateUser} from '../actions/authActions'
 import {loadTwitchData} from '../actions/twitchActions'
 import {connect} from 'react-redux'
 import {firestoreConnect} from 'react-redux-firebase'
@@ -14,7 +14,6 @@ import FontAwesome from '@expo/vector-icons/FontAwesome'
 
 const TWITCH_APP_ID = 'vfno0i2im9fshlfil4hsyiq6esfnex'; 
 const TWITCH_SECRET = 'w8eaix5nyl36bjrmbwtzdxjv7g6861';
-const currentUserID = AsyncStorage.getItem('currentUserID');
 let data = {
   "profile_url": '',
   "display_name": '',
@@ -36,16 +35,17 @@ class StreamerListScreen extends Component {
   _refreshData = async () =>{
     const access_token = await AsyncStorage.getItem('access_token');
     const refresh_token = await AsyncStorage.getItem('refresh_token');
+    const currentUserID = await AsyncStorage.getItem('currentUserID');
+
     this.setState({refreshing:true});
-    this._validateToken(access_token,refresh_token);
+    this._validateToken(access_token,refresh_token,currentUserID);
   }
-  _validateToken = async (access_token,refresh_token) =>{
+  _validateToken = async (access_token,refresh_token,currentUserID) =>{
     let result = await axios.get('https://id.twitch.tv/oauth2/validate',{
             headers:{'Authorization': 'OAuth '+access_token}
             })
             .then((result) => 
               { 
-                this.props.updateUser(result.user_id);
                 console.log('token validated')
                 this._handleUserdata(access_token);
               }
@@ -67,7 +67,7 @@ class StreamerListScreen extends Component {
       AsyncStorage.setItem('access_token', response.data.access_token)
       AsyncStorage.setItem('refresh_token', response.data.refresh_token)
       console.log('successfully got new token')
-      this.props.setUser(currentUserID, response.data);
+      this.props.updateUser(currentUserID, response.data);
     })
     .catch(function (error){
       console.log(error);
@@ -198,8 +198,7 @@ const mapStateToProps = (state) =>  {
 const mapDispatchToProps = (dispatch) =>{
   return{
     loadTwitchData: (userData,followingStreamersData) => dispatch(loadTwitchData(userData,followingStreamersData)),
-    updateUser: (uid) => dispatch(updateUser(uid)),
-    setUser: (currentUserID, token) =>dispatch(setUser(currentUserID, token))
+    updateUser: (currentUserID, token) =>dispatch(updateUser(currentUserID, token))
   }
 }
 export default compose(

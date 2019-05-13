@@ -15,7 +15,7 @@ class MyAddedFeed extends Component {
 
         missions.map(_mission => {
             for(_added of added){
-                if(_added.mission_id == _mission.id){
+                if(_added.mission_id == _mission.id&& _mission.status!='complete'){
                 console.log('not empty')
                 isEmpty = false;
                 return;
@@ -28,7 +28,7 @@ class MyAddedFeed extends Component {
         else{
             return missions.map(_mission => {
                 for(_added of added){
-                        if(_added.mission_id == _mission.id){
+                        if(_added.mission_id == _mission.id && _mission.status!='complete'){
                             return<MissionCard key={_mission.id} mission = {_mission} navigation={this.props.navigation}/>
                         }
                     }
@@ -53,12 +53,13 @@ class MyAddedFeed extends Component {
 
 const styles= StyleSheet.create({
     divide :{
+        marginTop:5,
         borderBottomWidth:1.5,
-        borderBottomColor:'#645393'
+        borderBottomColor:'#D5C8FA'
     },
     noMission:{
         fontFamily: 'nunito-semibold',
-        paddingLeft: 10,
+        paddingLeft: '5%',
         fontSize: 18,
         alignSelf:'center',
         textAlign:'left',

@@ -25,7 +25,7 @@ class AddToMissionScreen extends Component {
   state ={
     amount: '',
     from_id: this.props.twitch_user_data.id,
-    to_id: streamer.id,
+    to_id: this.props.mission.to_id,
     mission_id: this.props.mission_id,
     from_name: this.props.twitch_user_data.displayName,
   }
